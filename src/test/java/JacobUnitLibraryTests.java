@@ -1,17 +1,16 @@
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-// Test
+import org.junit.jupiter.api.DisplayName;
+
 /**
  *
  * @author 21304149
  */
 public class JacobUnitLibraryTests {
-    
+
     public JacobUnitLibraryTests() {
     }
-    
+
     @Test
     @DisplayName("Check for duplicates")
     public void testDupes(){
@@ -23,7 +22,7 @@ public class JacobUnitLibraryTests {
         ul.newLibrary(l2);
         assertFalse(ul.getBookForLib(l2, "The Bible"));
     }
-    
+
     @Test
     @DisplayName("Check for journal duplicates")
     public void testSubscribe(){
@@ -35,7 +34,7 @@ public class JacobUnitLibraryTests {
         ul.newLibrary(l2);
         assertFalse(ul.subscribe(l2, "Christianity Monthly"));
     }
-    
+
     @Test
     @DisplayName("Check if a book's in another University")
     public void testOtherUni(){
@@ -49,7 +48,7 @@ public class JacobUnitLibraryTests {
         uwon.newLibrary(l2);
         assertFalse(uwon.getBookForLib(l2, "Computer Science for Dummies"));
     }
-    
+
     @Test
     @DisplayName("Display previous owners")
     public void testShow(){
@@ -59,8 +58,4 @@ public class JacobUnitLibraryTests {
         assertFalse(l1.getBorrowers("The Bible").equals(""));
     }
 
-    @Test
-    void testBook(){
-        assertEquals(233, 233);
-    }
 }

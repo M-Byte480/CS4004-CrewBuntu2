@@ -21,7 +21,9 @@ public class Library {
     public ArrayList<String> getJournalSubs() {
         return journalSubs;
     }
-    
+
+
+    //if a library has a book
     public boolean inOtherLibs(String book, Library l){
         if(l.getBooks().contains(book)){
             return true;
@@ -29,7 +31,8 @@ public class Library {
             return false;
         }
     }
-    
+
+    //if a library has a subscription to journal
     public boolean inOtherLibsJournal(String journal, Library l){
         if(l.getJournalSubs().contains(journal)){
             return true;
@@ -41,12 +44,16 @@ public class Library {
     public ArrayList<String> getBooks(){
         return books;
     }
-    
+
+
+    //Adding a Borrower of book
     public void borrow(String book, String studentName, String borrowDate, String dueDate){
         Student borrower = new Student(book, studentName, borrowDate, dueDate);
         borrowers.add(borrower);
     }
-    
+
+
+    //returning a list of borrowers who borrowed a specific book
     public String getBorrowers(String book){
         String returnMe = "";
         for(int i = 0; i < borrowers.size(); i++){

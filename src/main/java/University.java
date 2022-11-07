@@ -7,7 +7,8 @@ public class University {
         libraries = new ArrayList<Library>();
         partners = new ArrayList<University>();
     }
-    
+
+    //adding a new library to partners
     public void newLibrary(Library l){
         libraries.add(l);
         for(int i = 0; i < partners.size(); i++){
@@ -22,7 +23,11 @@ public class University {
     public ArrayList<Library> getLibraries() {
         return libraries;
     }
-    
+
+
+    //go through every library
+    //if library contains book don't add it
+    //if it doesn't add it to specified library
     public boolean getBookForLib(Library l, String book){
         boolean addIt = true;
         for(int i = 0; i < libraries.size(); i++){
@@ -36,7 +41,10 @@ public class University {
         }
         return addIt;
     }
-    
+
+    //go through every library
+    //if library contains subscription don't add it
+    //if it doesn't add it to specified library
     public boolean subscribe(Library l, String journal){
         boolean addIt = true;
         for(int i = 0; i < libraries.size(); i++){
@@ -50,7 +58,11 @@ public class University {
         }
         return addIt;
     }
-    
+
+    //adding all university libraries
+    //add all librarys to university
+    //add university to partners
+    //add this university to partners
     public void joinUni(University u){
         libraries.addAll(u.getLibraries());
         u.getLibraries().addAll(libraries);

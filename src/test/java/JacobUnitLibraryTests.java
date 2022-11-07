@@ -11,6 +11,8 @@ public class JacobUnitLibraryTests {
     public JacobUnitLibraryTests() {
     }
 
+    //Complaint 1
+    //Unnecessary duplicate acquisition, by several departments, of infrequently accessed
     @Test
     @DisplayName("Check for duplicates")
     public void testDupes(){
@@ -23,6 +25,9 @@ public class JacobUnitLibraryTests {
         assertFalse(ul.getBookForLib(l2, "The Bible"));
     }
 
+
+    //Complaint 2
+    //Copies of books or proceedings that are relevant to more than one department.
     @Test
     @DisplayName("Check for journal duplicates")
     public void testSubscribe(){
@@ -35,6 +40,8 @@ public class JacobUnitLibraryTests {
         assertFalse(ul.subscribe(l2, "Christianity Monthly"));
     }
 
+    //Complaint 3
+    //Unnecessary subscription by several departments to expensive journals that are relevant to more than one department.
     @Test
     @DisplayName("Check if a book's in another University")
     public void testOtherUni(){
@@ -49,6 +56,9 @@ public class JacobUnitLibraryTests {
         assertFalse(uwon.getBookForLib(l2, "Computer Science for Dummies"));
     }
 
+    //Complaint 4
+    //Acquisition of books or proceedings of marginal interest to the university, which
+    //could be borrowed from other universities with which UWON has an agreement.
     @Test
     @DisplayName("Display previous owners")
     public void testShow(){
@@ -57,5 +67,10 @@ public class JacobUnitLibraryTests {
         l1.borrow("The Bible", "Jacob Beck", "23-03-23", "30-04-23");
         assertFalse(l1.getBorrowers("The Bible").equals(""));
     }
+
+
+    //Complaint 5
+    //Subscription to journals of marginal interest to the university, which could be
+    //accessed in other universities with which UWON has an agreement.
 
 }

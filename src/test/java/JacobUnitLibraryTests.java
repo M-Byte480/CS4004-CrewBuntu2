@@ -1,6 +1,12 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.io.FileNotFoundException;
+//import org.mockito.Mockito.*;
+//import org.junit.Assert.*;
 
 /**
  *
@@ -58,10 +64,33 @@ public class JacobUnitLibraryTests {
         assertFalse(l1.getBorrowers("The Bible").equals(""));
     }
     // ===================================== Milan =========================================== //
+    // ●    Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
+    //      found at the appropriate place on the shelves.
     @Test
     @DisplayName("")
     public void test(){
 
+    }
+    // ●    Bibliographical search restricted to library opening hours. Slow, tedious
+    //      bibliographical search due to manipulation of card indexes
+
+    @Test
+    @Timeout(10)
+    @DisplayName("Checking for Linear Search")
+    public void testSpeedOfLinearSearch(){
+        Book zealand = new Book();
+        zealand.addBibliography("zealand");
+        Library uwon = new Library();
+        assertTrue(uwon.linearSearch(zealand.getBibliography().get(0)));
+    }
+    @Test
+    @Timeout(2)
+    @DisplayName("Checking for Binary Search")
+    public void testSpeedOfBinarySearch() throws FileNotFoundException {
+        Book zealand = new Book();
+        zealand.addBibliography("zealand");
+        Library uwon = new Library();
+        assertTrue(uwon.binarySearch(zealand.getBibliography().get(0)));
     }
     // ===================================== End =========================================== //
 }

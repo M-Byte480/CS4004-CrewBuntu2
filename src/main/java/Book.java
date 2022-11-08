@@ -27,6 +27,16 @@ public class Book implements Comparator<Book> {
         this.bibliography = bibliography;
         this.isAvailable = true;
     }
+    public Book(){
+        this.name = new String();
+        this.author = new String();
+        this.genres = new ArrayList<>();
+        this.published = new Date();
+        this.isAvailable = true;
+        this.countriesAvailable = new String();
+        this.bibliography = new ArrayList<>();
+        this.departments = new ArrayList<>();
+    }
 
 
 
@@ -99,4 +109,7 @@ public class Book implements Comparator<Book> {
         return true;
     }
 
+    public void addBibliography(String word){
+        bibliography.add(word);
+    }
 }

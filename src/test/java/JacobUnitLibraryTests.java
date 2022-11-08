@@ -5,13 +5,15 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.FileNotFoundException;
-//import org.mockito.Mockito.*;
+import org.mockito.Mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
 /**
  *
  * @author 21304149
  */
+@ExtendWith(MockitoExtension.class)
 public class JacobUnitLibraryTests {
 
     public JacobUnitLibraryTests() {

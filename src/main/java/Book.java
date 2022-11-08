@@ -112,4 +112,9 @@ public class Book implements Comparator<Book> {
     public void addBibliography(String word){
         bibliography.add(word);
     }
+
+    public void setIsAvailable(boolean availability){
+        this.isAvailable = availability;
+    }
 }
+

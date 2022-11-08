@@ -12,5 +12,6 @@ public class Loan {
         this.book = book;
         this.startDate = startDate;
         this.dueDate = startDate.plusDays(loanLength);
+        book.setIsAvailable(false);
     }
 }

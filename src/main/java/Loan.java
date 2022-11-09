@@ -14,4 +14,20 @@ public class Loan {
         this.dueDate = startDate.plusDays(loanLength);
         book.setIsAvailable(false);
     }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public Student getLoanee() {
+        return loanee;
+    }
+
+    public Book getBook() {
+        return book;
+    }
 }

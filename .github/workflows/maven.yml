@@ -67,7 +67,7 @@ jobs:
     name: Check
     strategy:
       matrix:
-        jdk: [ 8, 11, 17, 19 ]
+        jdk: 11
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -77,10 +77,6 @@ jobs:
           name: ${{ env.WORKSPACE_ARTIFACT }}
           path: .
 
-      - name: Untar
-        run: |
-          tar -xvf ${{ env.WORKSPACE_ARCHIVE }}
-          rm ${{ env.WORKSPACE_ARCHIVE }}
       - uses: actions/setup-java@v3
         with:
           distribution: "temurin"

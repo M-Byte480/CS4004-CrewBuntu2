@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.FileNotFoundException;
-import org.mockito.Mockito.*;
+//import org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
@@ -63,7 +63,7 @@ public class JacobUnitLibraryTests {
         Library l1 = new Library();
         l1.getNewBook("The Bible");
         l1.borrow("The Bible", "Jacob Beck", "23-03-23", "30-04-23");
-        assertFalse(l1.getBorrowers("The Bible").equals(""));
+        assertNotEquals("", l1.getBorrowers("The Bible"));
     }
     // ===================================== Milan =========================================== //
     // ●    Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not

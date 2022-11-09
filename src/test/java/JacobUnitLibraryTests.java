@@ -1,3 +1,4 @@
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
@@ -5,7 +6,13 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.FileNotFoundException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 //import org.mockito.Mockito.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
@@ -75,24 +82,34 @@ public class JacobUnitLibraryTests {
     }
     // ●    Bibliographical search restricted to library opening hours. Slow, tedious
     //      bibliographical search due to manipulation of card indexes
-
-    @Test
-    @Timeout(10)
+    @ParameterizedTest
+    @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
+    @Timeout(1)
     @DisplayName("Checking for Linear Search")
-    public void testSpeedOfLinearSearch(){
-        Book zealand = new Book();
-        zealand.addBibliography("zealand");
+    public void testSpeedOfTwoSearches(String animal) throws FileNotFoundException {
+        Book animals = new Book();
+        animals.addBibliography(animal);
         Library uwon = new Library();
-        assertTrue(uwon.linearSearch(zealand.getBibliography().get(0)));
+
+        // Speed of Binary
+        Instant start = Instant.now();
+        uwon.binarySearch(animals.getBibliography().get(0));
+        Instant end = Instant.now();
+
+        // Print speed of Binary and calculate it
+        Duration binarySearchTime  = Duration.between(start, end);
+        System.out.println("Binary search took: " + binarySearchTime.toMillis() + " milliseconds");
+
+        // Speed of Linear Search
+        start = Instant.now();
+        uwon.linearSearch(animals.getBibliography().get(0));
+        end = Instant.now();
+
+        // Print speed of
+        Duration linearSearchTime  = Duration.between(start, end);
+        System.out.println("Linear search took: " + linearSearchTime.toMillis() + " milliseconds");
+
+        assertTrue(Library.faster(binarySearchTime, linearSearchTime));
     }
-    @Test
-    @Timeout(2)
-    @DisplayName("Checking for Binary Search")
-    public void testSpeedOfBinarySearch() throws FileNotFoundException {
-        Book zealand = new Book();
-        zealand.addBibliography("zealand");
-        Library uwon = new Library();
-        assertTrue(uwon.binarySearch(zealand.getBibliography().get(0)));
-    }
-    // ===================================== End =========================================== //
+    // ===================================== End of Milan =========================================== //
 }

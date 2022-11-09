@@ -59,17 +59,8 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: "temurin"
-          java-version: ${{ env.JDK_VERSION }}
+          java-version: 11
 
-
-      - name: Tar files
-        run: tar -cvf ${{ env.WORKSPACE_ARCHIVE }} .
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.WORKSPACE_ARTIFACT }}
-          path: ${{ env.WORKSPACE_ARCHIVE }}
-          retention-days: 1
 
 
   check:

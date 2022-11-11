@@ -1,6 +1,8 @@
 import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
 /**
- *
  * @author 21308128
  */
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +29,7 @@ public class JacobUnitLibraryTests {
 
     @Test
     @DisplayName("Check for duplicates")
-    public void testDupes(){
+    public void testDupes() {
         University ul = new University();
         Library l1 = new Library();
         ul.newLibrary(l1);
@@ -39,7 +41,7 @@ public class JacobUnitLibraryTests {
 
     @Test
     @DisplayName("Check for journal duplicates")
-    public void testSubscribe(){
+    public void testSubscribe() {
         University ul = new University();
         Library l1 = new Library();
         ul.newLibrary(l1);
@@ -51,7 +53,7 @@ public class JacobUnitLibraryTests {
 
     @Test
     @DisplayName("Check if a book's in another University")
-    public void testOtherUni(){
+    public void testOtherUni() {
         University ul = new University();
         University uwon = new University();
         uwon.joinUni(ul);
@@ -65,12 +67,80 @@ public class JacobUnitLibraryTests {
 
     @Test
     @DisplayName("Display previous owners")
-    public void testShow(){
+    public void testShow() {
         Library l1 = new Library();
         l1.getNewBook("The Bible");
         l1.borrow("The Bible", "Jacob Beck", "23-03-23", "30-04-23");
         assertNotEquals("", l1.getBorrowers("The Bible"));
     }
+
+    // ===================================== Breny =========================================== //
+    //Complaint 5
+    //Subscription to journals of marginal interest to the university, which could be
+    //accessed in other universities with which UWON has an agreement.
+    @Test
+    @DisplayName("Check to see if subscription is available in UWON")
+    public void subscriptionsAcrossUWON() {
+        University u1 = new University();
+        University u2 = new University();
+        u1.joinUni(u2);
+        ArrayList<Book> DW = new ArrayList<>();
+        Subscription davidWalliams = new Subscription("Gangster Granny", DW);
+        Library l1 = new Library();
+        Library l2 = new Library();
+        u2.newLibrary(l1);
+        u2.newLibrary(l2);
+        l1.addASubscription(davidWalliams);
+        assertTrue(u2.getSubscriptionForLib(l2, davidWalliams));
+    }
+    //Complaint 6
+    //Acquisition of books or proceedings of marginal interest to the university, which
+    //could be borrowed from other universities with which UWON has an agreement.
+    @Test
+    @DisplayName("Check to see if subscription is available in UWON")
+    public void sendingCompSciBooksFromLSADToUL () {
+        University UL = new University();
+        University LSAD = new University();
+        LSAD.joinUni(UL);
+
+
+
+    }
+    //Complaint 7
+    //Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
+    //found at the appropriate place on the shelves.
+    @Test
+    @DisplayName("Problem 7 : Innacuracy of book being on specified shelf")
+    public void bookOnShelFinder(){
+        University BrenysWRLD = new University();
+        Library BookRoom = new Library();
+        BrenysWRLD.newLibrary(BookRoom);
+
+        ArrayList<Book> AnimeArraylist = new ArrayList<>() ;
+        Book Yugioh = new Book("Yu-gi-oh","Kazuki Takahashi");
+        AnimeArraylist.add(Yugioh);
+        Shelf Anime = new Shelf("Amine", AnimeArraylist);
+        BookRoom.newShelf(Anime);
+
+        ArrayList<Book> OverwatchArraylist = new ArrayList<>() ;
+        Book Monke = new Book("Monke","Winston");
+        OverwatchArraylist.add(Monke);
+        Shelf Overwatch = new Shelf("Overwatch", OverwatchArraylist);
+        BookRoom.newShelf(Overwatch);
+
+        BookRoom.addNewBooksToSystem(Monke,Overwatch);
+
+        Book bobo = new Book("Monke","Winston");
+        BookRoom.addNewBooksToSystem(bobo,Overwatch);
+        BookRoom.newShelf(Anime);
+        BookRoom.newShelf(Overwatch);
+        BrenysWRLD.newLibrary(BookRoom);
+
+        assertTrue(BrenysWRLD.checkUniversityForBook(bobo));
+    }
+    // ===================================== End of Breny =========================================== //
+
+
     // ===================================== Milan =========================================== //
     // Problem 8:
     // ●    Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
@@ -82,7 +152,7 @@ public class JacobUnitLibraryTests {
     // To simplify this we will standardize it and will do it by ascending alphabetical order.
     @DisplayName("Problem 8: \n Sorting Algorithm")
     @Test
-    public void test(){
+    public void test() {
 
     }
 
@@ -106,7 +176,7 @@ public class JacobUnitLibraryTests {
         Instant end = Instant.now();
 
         // Print speed of Binary and calculate it
-        Duration binarySearchTime  = Duration.between(start, end);
+        Duration binarySearchTime = Duration.between(start, end);
         System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
 
         // Speed of Linear Search
@@ -115,7 +185,7 @@ public class JacobUnitLibraryTests {
         end = Instant.now();
 
         // Print speed of
-        Duration linearSearchTime  = Duration.between(start, end);
+        Duration linearSearchTime = Duration.between(start, end);
         System.out.println("Linear search took: " + linearSearchTime.toNanos() + " nanoseconds");
 
         assertTrue(binarySearchTime.toNanos() <= linearSearchTime.toNanos());

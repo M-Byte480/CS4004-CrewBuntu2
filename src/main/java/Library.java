@@ -9,11 +9,15 @@ import java.util.Scanner;
 
 public class Library {
     private ArrayList<String> books;
+    private ArrayList<Subscription> subscriptions;
     private ArrayList<String> journalSubs;
     private ArrayList<Student> borrowers;
     private static ArrayList<String> bibliography;
     private ArrayList<Reminder> reminders;
     private ArrayList<Loan> loans;
+
+    private ArrayList<Shelf> shelves;
+
 
     static {
         try {
@@ -23,63 +27,65 @@ public class Library {
         }
     }
 
-    public Library(){
+    public Library() {
         books = new ArrayList<String>();
+        subscriptions = new ArrayList<Subscription>();
         journalSubs = new ArrayList<String>();
         borrowers = new ArrayList<Student>();
+        shelves = new ArrayList<Shelf>();
     }
-    
-    public void getNewBook(String book){
+
+    public void getNewBook(String book) {
         books.add(book);
     }
 
-    public void subscribe(String journal){
-        journalSubs.add(journal);
-    }
-    
+
     public ArrayList<String> getJournalSubs() {
         return journalSubs;
     }
-    
-    public boolean inOtherLibs(String book, Library l){
-        if(l.getBooks().contains(book)){
+
+    public boolean inOtherLibs(String book, Library l) {
+        if (l.getBooks().contains(book)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    
-    public boolean inOtherLibsJournal(String journal, Library l){
-        if(l.getJournalSubs().contains(journal)){
+
+    public boolean inOtherLibsJournal(String journal, Library l) {
+        if (l.getJournalSubs().contains(journal)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    
-    public ArrayList<String> getBooks(){
+
+
+
+
+    public ArrayList<String> getBooks() {
         return books;
     }
-    
-    public void borrow(String book, String studentName, String borrowDate, String dueDate){
+
+    public void borrow(String book, String studentName, String borrowDate, String dueDate) {
         Student borrower = new Student(book, studentName, borrowDate, dueDate);
         borrowers.add(borrower);
     }
-    
-    public String getBorrowers(String book){
+
+    public String getBorrowers(String book) {
         String returnMe = "";
-        for(int i = 0; i < borrowers.size(); i++){
-            if(borrowers.get(i).getBorrowedBook().equals(book)){
+        for (int i = 0; i < borrowers.size(); i++) {
+            if (borrowers.get(i).getBorrowedBook().equals(book)) {
                 returnMe += borrowers.get(i).toString();
-            }             
+            }
         }
         return returnMe;
     }
 
-    public boolean linearSearch(String name){
+    public boolean linearSearch(String name) {
         for (String type :
                 bibliography) {
-            if (name.equals(type)){
+            if (name.equals(type)) {
                 return true;
             }
         }
@@ -94,36 +100,95 @@ public class Library {
         File file = new File("src/main/java/wordlist.180000");
         Scanner writeBibliography = new Scanner(file);
         ArrayList<String> words = new ArrayList<>();
-        while(writeBibliography.hasNextLine()){
+        while (writeBibliography.hasNextLine()) {
             words.add(writeBibliography.nextLine());
         }
         return words;
     }
 
 
-
-    public ArrayList<String> getBibliography(){
+    public ArrayList<String> getBibliography() {
         return bibliography;
     }
 
-    public void addLoan(Loan loan){
+    public void addLoan(Loan loan) {
         loans.add(new Loan(loan.getLoanee(), loan.getBook(), loan.getStartDate()));
     }
 
 
-    public void isBookDue(Loan loan){
-        if ((loan.getDueDate().compareTo(LocalDate.now()) > 0)){
-            reminders.add(new Reminder(loan.getLoanee(),loan.getBook()));
+    public void isBookDue(Loan loan) {
+        if ((loan.getDueDate().compareTo(LocalDate.now()) > 0)) {
+            reminders.add(new Reminder(loan.getLoanee(), loan.getBook()));
         }
     }
 
-    public static void sendReminder(Student loanee){
+    public static void sendReminder(Student loanee) {
         // Need to send a Reminder object that will periodically be sent to the student's email
 
     }
 
-    public static boolean faster(Duration a, Duration b){
+    public static boolean faster(Duration a, Duration b) {
         return a.toMillis() <= b.toMillis();
     }
 
+
+    public void subscribe(String journal) {
+        journalSubs.add(journal);
+    }
+
+
+    //----------------------SUBSCRIPTIONS-----------------------------------------
+    public void addASubscription(Subscription s) {
+        if (subscriptions.contains(s)) {
+        } else {
+            subscriptions.add(s);
+        }
+
+    }
+
+    public boolean inOtherLibsSubscription(Subscription subscription, Library l) {
+        if (l.getJournalSubs().contains(subscription)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //-----------------------------------------------------SHELVES----------------------------------------
+
+
+
+    public void newShelf(Shelf s) {
+        shelves.add(s);
+    }
+
+
+    public void addNewBooksToSystem(Book b, Shelf s){
+        if(shelves.contains(s)){
+            s.addBookToShelf(b);
+            b.setShelfWhereStored(s);
+        }
+    }
+
+    public boolean checkShelfForBook(Book book) {
+        boolean bookAvailable = false;
+        if(book.getShelfWhereStored() != null && book.getShelfWhereStored().getBooks().contains(book) ){
+            bookAvailable = true;
+            return bookAvailable;
+        }
+
+        return checkBookInLibrary(book);
+    }
+
+    public boolean checkBookInLibrary(Book book) {
+        boolean bookAvailable = false;
+        for (Shelf s : shelves) {
+        for (Book b : s.getBooks()) {
+            if (b.equals(book)) {
+                bookAvailable = true;
+            }
+        }
+        }
+        return bookAvailable;
+
+    }
 }

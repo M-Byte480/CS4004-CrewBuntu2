@@ -16,6 +16,7 @@ public class Book implements Comparator<Book> {
     private
     ArrayList<String> bibliography;
     private boolean isAvailable;
+    private Shelf shelfWhereStored;
 
     public Book(String name, String author, Date published, ArrayList<String> genres, ArrayList<String> departments, String countriesAvailable, ArrayList<String> bibliography) {
         this.name = name;
@@ -27,7 +28,9 @@ public class Book implements Comparator<Book> {
         this.bibliography = bibliography;
         this.isAvailable = true;
     }
-    public Book(){
+
+
+    public Book() {
         this.name = new String();
         this.author = new String();
         this.genres = new ArrayList<>();
@@ -38,6 +41,10 @@ public class Book implements Comparator<Book> {
         this.departments = new ArrayList<>();
     }
 
+    public Book(String name, String author) {
+        this.name = name;
+        this.author = author;
+    }
 
 
     @Override
@@ -105,16 +112,25 @@ public class Book implements Comparator<Book> {
         this.bibliography = bibliography;
     }
 
-    public static boolean test(){
+    public static boolean test() {
         return true;
     }
 
-    public void addBibliography(String word){
+    public void addBibliography(String word) {
         bibliography.add(word);
     }
 
-    public void setIsAvailable(boolean availability){
+    public void setIsAvailable(boolean availability) {
         this.isAvailable = availability;
     }
-}
 
+
+    //-----------------------------------------------------SHELVES--------------------------------------------------
+    public void setShelfWhereStored(Shelf shelfWhereStored) {
+        this.shelfWhereStored = shelfWhereStored;
+    }
+
+    public Shelf getShelfWhereStored() {
+        return shelfWhereStored;
+    }
+}

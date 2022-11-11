@@ -1,5 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -9,6 +12,8 @@ public class Library {
     private ArrayList<String> journalSubs;
     private ArrayList<Student> borrowers;
     private static ArrayList<String> bibliography;
+    private ArrayList<Reminder> reminders;
+    private ArrayList<Loan> loans;
 
     static {
         try {
@@ -86,7 +91,7 @@ public class Library {
     }
 
     private static ArrayList<String> populate() throws FileNotFoundException {
-        File file = new File("src/main/java/wordlist.10000");
+        File file = new File("src/main/java/wordlist.180000");
         Scanner writeBibliography = new Scanner(file);
         ArrayList<String> words = new ArrayList<>();
         while(writeBibliography.hasNextLine()){
@@ -99,6 +104,26 @@ public class Library {
 
     public ArrayList<String> getBibliography(){
         return bibliography;
+    }
+
+    public void addLoan(Loan loan){
+        loans.add(new Loan(loan.getLoanee(), loan.getBook(), loan.getStartDate()));
+    }
+
+
+    public void isBookDue(Loan loan){
+        if ((loan.getDueDate().compareTo(LocalDate.now()) > 0)){
+            reminders.add(new Reminder(loan.getLoanee(),loan.getBook()));
+        }
+    }
+
+    public static void sendReminder(Student loanee){
+        // Need to send a Reminder object that will periodically be sent to the student's email
+
+    }
+
+    public static boolean faster(Duration a, Duration b){
+        return a.toMillis() <= b.toMillis();
     }
 
 }

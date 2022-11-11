@@ -59,6 +59,7 @@ public class University {
         return addIt;
     }
 
+    // test run
     //adding all university libraries
     //add all librarys to university
     //add university to partners

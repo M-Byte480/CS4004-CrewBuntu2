@@ -8,8 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -18,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  *
- * @author 21304149
+ * @author 21308128
  */
 @ExtendWith(MockitoExtension.class)
 public class JacobUnitLibraryTests {
@@ -73,19 +72,29 @@ public class JacobUnitLibraryTests {
         assertNotEquals("", l1.getBorrowers("The Bible"));
     }
     // ===================================== Milan =========================================== //
+    // Problem 8:
     // ●    Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
     //      found at the appropriate place on the shelves.
+
+    // Approach:
+    // Since the book is not found in the correct place on the shelf, suggests to me that there are
+    // two separate naming and sorting convention hosted.
+    // To simplify this we will standardize it and will do it by ascending alphabetical order.
+    @DisplayName("Problem 8: \n Sorting Algorithm")
     @Test
-    @DisplayName("")
     public void test(){
 
     }
+
+    // Problem 9:
     // ●    Bibliographical search restricted to library opening hours. Slow, tedious
     //      bibliographical search due to manipulation of card indexes
+    //
+    //
+    @DisplayName("Problem 9: \n Search Speed Test")
     @ParameterizedTest
     @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
     @Timeout(1)
-    @DisplayName("Checking for Linear Search")
     public void testSpeedOfTwoSearches(String animal) throws FileNotFoundException {
         Book animals = new Book();
         animals.addBibliography(animal);
@@ -98,7 +107,7 @@ public class JacobUnitLibraryTests {
 
         // Print speed of Binary and calculate it
         Duration binarySearchTime  = Duration.between(start, end);
-        System.out.println("Binary search took: " + binarySearchTime.toMillis() + " milliseconds");
+        System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
 
         // Speed of Linear Search
         start = Instant.now();
@@ -107,9 +116,9 @@ public class JacobUnitLibraryTests {
 
         // Print speed of
         Duration linearSearchTime  = Duration.between(start, end);
-        System.out.println("Linear search took: " + linearSearchTime.toMillis() + " milliseconds");
+        System.out.println("Linear search took: " + linearSearchTime.toNanos() + " nanoseconds");
 
-        assertTrue(Library.faster(binarySearchTime, linearSearchTime));
+        assertTrue(binarySearchTime.toNanos() <= linearSearchTime.toNanos());
     }
     // ===================================== End of Milan =========================================== //
 }

@@ -13,6 +13,7 @@ public class Loan {
         this.startDate = startDate;
         this.dueDate = startDate.plusDays(loanLength);
         book.setIsAvailable(false);
+        book.getLoanees().add(loanee);
     }
 
     public LocalDate getStartDate() {

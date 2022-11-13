@@ -16,6 +16,9 @@ public class Book implements Comparator<Book> {
     private
     ArrayList<String> bibliography;
     private boolean isAvailable;
+    private ArrayList<Student> loanees;
+    private boolean isBeingBound = false;
+    private boolean isDamaged;
 
     public Book(String name, String author, Date published, ArrayList<String> genres, ArrayList<String> departments, String countriesAvailable, ArrayList<String> bibliography) {
         this.name = name;
@@ -26,6 +29,7 @@ public class Book implements Comparator<Book> {
         this.countriesAvailable = countriesAvailable;
         this.bibliography = bibliography;
         this.isAvailable = true;
+        this.loanees = new ArrayList<Student>();
     }
     public Book(){
         this.name = new String();
@@ -36,6 +40,8 @@ public class Book implements Comparator<Book> {
         this.countriesAvailable = new String();
         this.bibliography = new ArrayList<>();
         this.departments = new ArrayList<>();
+        this.loanees = new ArrayList<Student>();
+
     }
 
 
@@ -115,6 +121,24 @@ public class Book implements Comparator<Book> {
 
     public void setIsAvailable(boolean availability){
         this.isAvailable = availability;
+    }
+
+    public void beingBound(){
+        this.isBeingBound = true;
+        this.requestEBookVersion();
+    }
+
+    public void requestEBookVersion(){
+        EBookRequest request = new EBookRequest(this);
+        Library.getRequestsForEBooks().add(request);
+    }
+
+    public ArrayList<Student> getLoanees() {
+        return loanees;
+    }
+
+    public Student lastStudentBeforeDamage(){
+        return loanees.get(loanees.size() - 1);
     }
 }
 

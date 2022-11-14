@@ -15,6 +15,18 @@ public class Book implements Comparator<Book> {
     private boolean isBeingBound = false;
     private boolean isDamaged;
 
+    public Book(String name, String author) {
+        this.name = name;
+        this.author = author;
+        this.genres = new ArrayList<>();
+        this.published = new Date();
+        this.isAvailable = true;
+        this.countriesAvailable = new String();
+        this.bibliography = new ArrayList<>();
+        this.departments = new ArrayList<>();
+        this.loanees = new ArrayList<Student>();
+    }
+
     public Book(String name, String author, Date published, ArrayList<String> genres, ArrayList<String> departments, String countriesAvailable, ArrayList<String> bibliography) {
         this.name = name;
         this.author = author;
@@ -26,6 +38,7 @@ public class Book implements Comparator<Book> {
         this.isAvailable = true;
         this.loanees = new ArrayList<Student>();
     }
+
     public Book(){
         this.name = new String();
         this.author = new String();
@@ -36,7 +49,6 @@ public class Book implements Comparator<Book> {
         this.bibliography = new ArrayList<>();
         this.departments = new ArrayList<>();
         this.loanees = new ArrayList<Student>();
-
     }
 
 
@@ -134,6 +146,13 @@ public class Book implements Comparator<Book> {
 
     public Student lastStudentBeforeDamage(){
         return loanees.get(loanees.size() - 1);
+    }
+
+    public Library getShelfWhereStored() {
+        return new Library();
+    }
+
+    public void setShelfWhereStored(Shelf s) {
     }
 }
 

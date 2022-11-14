@@ -83,9 +83,6 @@ public class Library {
         return books;
     }
 
-    public void borrow(String book, String studentName, String borrowDate, String dueDate) {
-        Student borrower = new Student(book, studentName, borrowDate, dueDate);
-    }
     public void borrow(String book, String studentName, int daysUntilDue){
         Student borrower = new Student(book, studentName, daysUntilDue);
         borrowers.add(borrower);

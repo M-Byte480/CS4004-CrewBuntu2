@@ -91,4 +91,12 @@ public class University {
         partners.add(u);
         u.getPartners().add(this);
     }
+
+    public boolean getSubscriptionForLib(Library l2, Subscription davidWalliams) {
+        return false;
+    }
+
+    public boolean checkUniversityForBook(Book bobo) {
+        return false;
+    }
 }

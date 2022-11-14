@@ -16,7 +16,9 @@ public class Book implements Comparator<Book> {
     private
     ArrayList<String> bibliography;
     private boolean isAvailable;
-    private Shelf shelfWhereStored;
+    private ArrayList<Student> loanees;
+    private boolean isBeingBound = false;
+    private boolean isDamaged;
 
     public Book(String name, String author, Date published, ArrayList<String> genres, ArrayList<String> departments, String countriesAvailable, ArrayList<String> bibliography) {
         this.name = name;
@@ -27,10 +29,9 @@ public class Book implements Comparator<Book> {
         this.countriesAvailable = countriesAvailable;
         this.bibliography = bibliography;
         this.isAvailable = true;
+        this.loanees = new ArrayList<Student>();
     }
-
-
-    public Book() {
+    public Book(){
         this.name = new String();
         this.author = new String();
         this.genres = new ArrayList<>();
@@ -39,12 +40,10 @@ public class Book implements Comparator<Book> {
         this.countriesAvailable = new String();
         this.bibliography = new ArrayList<>();
         this.departments = new ArrayList<>();
+        this.loanees = new ArrayList<Student>();
+
     }
 
-    public Book(String name, String author) {
-        this.name = name;
-        this.author = author;
-    }
 
 
     @Override
@@ -112,25 +111,34 @@ public class Book implements Comparator<Book> {
         this.bibliography = bibliography;
     }
 
-    public static boolean test() {
+    public static boolean test(){
         return true;
     }
 
-    public void addBibliography(String word) {
+    public void addBibliography(String word){
         bibliography.add(word);
     }
 
-    public void setIsAvailable(boolean availability) {
+    public void setIsAvailable(boolean availability){
         this.isAvailable = availability;
     }
 
-
-    //-----------------------------------------------------SHELVES--------------------------------------------------
-    public void setShelfWhereStored(Shelf shelfWhereStored) {
-        this.shelfWhereStored = shelfWhereStored;
+    public void beingBound(){
+        this.isBeingBound = true;
+        this.requestEBookVersion();
     }
 
-    public Shelf getShelfWhereStored() {
-        return shelfWhereStored;
+    public void requestEBookVersion(){
+        EBookRequest request = new EBookRequest(this);
+        Library.getRequestsForEBooks().add(request);
+    }
+
+    public ArrayList<Student> getLoanees() {
+        return loanees;
+    }
+
+    public Student lastStudentBeforeDamage(){
+        return loanees.get(loanees.size() - 1);
     }
 }
+

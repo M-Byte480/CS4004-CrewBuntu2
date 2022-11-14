@@ -11,7 +11,7 @@ public class Library {
     private ArrayList<String> books;
     private ArrayList<String> journalSubs;
     private ArrayList<Student> borrowers;
-    private static ArrayList<String> bibliography;
+    private static final ArrayList<String> bibliography;
     private ArrayList<Reminder> reminders;
     private ArrayList<Loan> loans;
 
@@ -122,8 +122,5 @@ public class Library {
 
     }
 
-    public static boolean faster(Duration a, Duration b){
-        return a.toMillis() <= b.toMillis();
-    }
 
 }

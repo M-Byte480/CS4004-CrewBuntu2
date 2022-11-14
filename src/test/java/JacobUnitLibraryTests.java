@@ -12,6 +12,7 @@ import java.time.Instant;
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
@@ -83,7 +84,8 @@ public class JacobUnitLibraryTests {
     @DisplayName("Problem 8: \n Sorting Algorithm")
     @Test
     public void test(){
-
+        Book[] books = new Book[10];
+//        books.sort();
     }
 
     // Problem 9:
@@ -107,7 +109,6 @@ public class JacobUnitLibraryTests {
 
         // Print speed of Binary and calculate it
         Duration binarySearchTime  = Duration.between(start, end);
-        System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
 
         // Speed of Linear Search
         start = Instant.now();
@@ -116,7 +117,12 @@ public class JacobUnitLibraryTests {
 
         // Print speed of
         Duration linearSearchTime  = Duration.between(start, end);
+
+
+        ///* Here is a neat Trick: you can comment out this block of code by removing //
+        System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
         System.out.println("Linear search took: " + linearSearchTime.toNanos() + " nanoseconds");
+        //*/
 
         assertTrue(binarySearchTime.toNanos() <= linearSearchTime.toNanos());
     }

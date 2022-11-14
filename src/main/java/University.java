@@ -1,4 +1,8 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 public class University {
     private ArrayList<Library> libraries;
     private ArrayList<University> partners;
@@ -9,12 +13,9 @@ public class University {
     }
 
     //adding a new library to partners
-    public void newLibrary(Library l){
-        libraries.add(l);
-        for(int i = 0; i < partners.size(); i++){
-            partners.get(i).getLibraries().add(l);
-        }
-    }
+    public void newLibrary(Library l) { libraries.add(l); }
+
+    public void newPartner(University u) { partners.add(u); }
 
     public ArrayList<University> getPartners() {
         return partners;
@@ -22,6 +23,26 @@ public class University {
 
     public ArrayList<Library> getLibraries() {
         return libraries;
+    }
+
+    public ArrayList<String> findBook(String bookName) throws Exception {
+        ArrayList<String> books = new ArrayList<String>();
+        ArrayList<Library> tempLibraries = new ArrayList<Library>();
+        ArrayList<University> tempPartners = getPartners();
+        tempLibraries.addAll(libraries);
+        for (University u : tempPartners) {
+            tempLibraries.addAll(u.getLibraries());
+        }
+        for (Library l : tempLibraries) {
+            books.addAll(l.searchBooks(bookName));
+        }
+        if (books.size() == 0) {
+            throw new Exception("There are no matching search results.");
+        }
+        // Change books to a set and back to remove duplicate entries.
+        Set<String> set = new HashSet<String>(books);
+        ArrayList<String> list = new ArrayList<String>(set);
+        return list;
     }
 
 

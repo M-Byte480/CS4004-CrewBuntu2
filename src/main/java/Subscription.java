@@ -4,6 +4,8 @@ public class Subscription{
     private String name;
     private ArrayList<Book> bookList;
 
+
+
     public Subscription(String name, ArrayList<Book> bookList){
         this.name = name;
         this.bookList = bookList;
@@ -21,7 +23,11 @@ public class Subscription{
         return bookList;
     }
 
+
     public void setBookList(ArrayList<Book> bookList) {
         this.bookList = bookList;
     }
+
+
+
 }

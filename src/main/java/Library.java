@@ -14,6 +14,7 @@ public class Library {
     private static final ArrayList<String> bibliography;
     private ArrayList<Reminder> reminders;
     private ArrayList<Loan> loans;
+    private static ArrayList<EBookRequest> requestsForEBooks;
 
     static {
         try {
@@ -110,6 +111,9 @@ public class Library {
         loans.add(new Loan(loan.getLoanee(), loan.getBook(), loan.getStartDate()));
     }
 
+    public static ArrayList<EBookRequest> getRequestsForEBooks() {
+        return requestsForEBooks;
+    }
 
     public void isBookDue(Loan loan){
         if ((loan.getDueDate().compareTo(LocalDate.now()) > 0)){

@@ -3,9 +3,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 public class Library {
     private ArrayList<String> books;
@@ -14,6 +12,7 @@ public class Library {
     private static ArrayList<String> bibliography;
     private ArrayList<Reminder> reminders;
     private ArrayList<Loan> loans;
+    private HashMap<String, ArrayList<Student>> borrowInstances = new HashMap<String, ArrayList<Student>>();
 
     static {
         try {
@@ -31,6 +30,22 @@ public class Library {
     
     public void getNewBook(String book){
         books.add(book);
+    }
+
+    public void populateBook(String[] books) {
+        for(String book : books) {
+            this.books.add(book);
+        }
+    }
+
+    public ArrayList<String> searchBooks (String bookName) {
+        ArrayList<String> books = new ArrayList<String>();
+        for (String book : this.books) {
+            if (book.toLowerCase().indexOf(bookName.toLowerCase()) != -1) {
+                books.add(book);
+            }
+        }
+        return books;
     }
 
     public void subscribe(String journal){
@@ -61,8 +76,8 @@ public class Library {
         return books;
     }
     
-    public void borrow(String book, String studentName, String borrowDate, String dueDate){
-        Student borrower = new Student(book, studentName, borrowDate, dueDate);
+    public void borrow(String book, String studentName, int daysUntilDue){
+        Student borrower = new Student(book, studentName, daysUntilDue);
         borrowers.add(borrower);
     }
     
@@ -126,4 +141,29 @@ public class Library {
         return a.toMillis() <= b.toMillis();
     }
 
+    public boolean addBorrower(String bookName, Student student) {
+        borrowInstances.putIfAbsent(bookName, new ArrayList<Student>());
+        String name = student.getName();
+        ArrayList<String> borrowers = getBorrowerHistory(bookName);
+        int counter = 0;
+        for (String borrower: borrowers) {
+            if (borrower.equals(name)) {
+                counter++;
+            }
+        }
+        if (counter > 1) {
+            return false;
+        }
+        borrowInstances.get(bookName).add(student);
+        return true;
+    }
+
+    public ArrayList<String> getBorrowerHistory(String bookName) {
+        ArrayList<String> borrowers = new ArrayList<String>();
+        ArrayList<Student> students = borrowInstances.get(bookName);
+        for (Student student: students) {
+            borrowers.add(student.getName());
+        }
+        return borrowers;
+    }
 }

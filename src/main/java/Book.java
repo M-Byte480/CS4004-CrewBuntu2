@@ -5,16 +5,11 @@ import java.util.Date;
 public class Book implements Comparator<Book> {
     private String name;
     private String author;
-    private
-    Date published;
-    private
-    ArrayList<String> genres;
-    private
-    ArrayList<String> departments;
-    private
-    String countriesAvailable;
-    private
-    ArrayList<String> bibliography;
+    private Date published;
+    private ArrayList<String> genres;
+    private ArrayList<String> departments;
+    private String countriesAvailable;
+    private ArrayList<String> bibliography;
     private boolean isAvailable;
 
     public Book(String name, String author, Date published, ArrayList<String> genres, ArrayList<String> departments, String countriesAvailable, ArrayList<String> bibliography) {

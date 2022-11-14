@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import java.util.*;
 
 import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
 
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -68,7 +70,7 @@ public class JacobUnitLibraryTests {
     public void testShow(){
         Library l1 = new Library();
         l1.getNewBook("The Bible");
-        l1.borrow("The Bible", "Jacob Beck", "23-03-23", "30-04-23");
+        l1.borrow("The Bible", "Jacob Beck", 15);
         assertNotEquals("", l1.getBorrowers("The Bible"));
     }
     // ===================================== Milan =========================================== //
@@ -121,4 +123,119 @@ public class JacobUnitLibraryTests {
         assertTrue(binarySearchTime.toNanos() <= linearSearchTime.toNanos());
     }
     // ===================================== End of Milan =========================================== //
+
+    /*
+    ===================================== Aaron ===========================================
+     -    Unavailability of requested books, for a variety of reasons such as
+          department budget restrictions, excessive borrowing by the same user,
+          lack of enforcement of rules limiting loan periods, loss or stealing
+          of book copies and so on.
+
+     (Excessive Borrowing) Let's say if a book has been borrowed twice within the
+     past 3 months by the same user, we don't allow them to borrow it again.
+
+     (Loan Periods) If a loan is overdue we will add the book name and borrower
+     name to an arraylist of books that need to be returned. This arraylist can
+     then be accessed by moderators to see what books need to be returned, so they
+     can reach out to the borrower.
+     */
+
+    @Test
+    @DisplayName("Test for excessive borrowing.")
+    public void testForExcessiveBorrowing() {
+        Library uwon = new Library();
+        Student student = new Student("", "Timmy", 14);
+        Student student2 = new Student("", "John", 14);
+        // Adds two instances of the student borrowing "The Bible".
+        uwon.addBorrower("The Bible", student);
+        uwon.addBorrower("The Bible", student);
+        // Returns false and doesn't borrow the book because there is already 2 instances of the student borrowing "The Bible" in the past 3 months.
+        assertFalse(uwon.addBorrower("The Bible", student));
+        // Returns true and borrows the book because the student has not borrowed this book before.
+        assertTrue(uwon.addBorrower("How To Steal Identities", student));
+        // Returns true and borrows the book because a different student has not borrowed this same book before.
+        assertTrue(uwon.addBorrower("The Bible", student2));
+    }
+
+    @Test
+    @DisplayName("Test for overdue loans.")
+    public void testForOverdueLoans() {
+        Student student = new Student("", "Timmy", 14);
+        // Returns false because the book is not due.
+        assertFalse(student.checkDue());
+        // Increases the loan time by 14 days.
+        student.increaseBorrowTime(14);
+        // Returns true because the book is overdue (it has been loaned for over 14 days).
+        assertTrue(student.checkDue());
+    }
+
+    /*
+     -    Incomplete or ineffective search results, due to relevant books, journals
+     or proceedings being indexed in other UWON department libraries, or unavailable
+     at UWON.
+
+     (Books etc. being indexed in other libraries) Let's say that there are a set amount
+     of UWON department libraries, e.g. 3. When searching for books etc., we will search
+     each library for results and display a list of matching searches.
+
+     (Unavailability of books) A book may be unavailable at UWON but available in partner
+     libraries, so we will also check those in our search.
+
+     */
+
+    @Test
+    @DisplayName("Test for comprehensive search results.")
+    public void testForComprehensiveSearchResults() throws Exception {
+        // Initializing libraries and books available at UWON.
+        University uwon = new University();
+        Library l1 = new Library();
+        Library l2 = new Library();
+        Library l3 = new Library();
+        l1.populateBook(new String[] {
+                "The Bible",
+                "Of Mice And Men",
+                "Winnie The Pooh"
+        });
+        l2.populateBook(new String[] {
+                "The Bible",
+                "Alice in Wonderland",
+        });
+        l3.populateBook(new String[] {
+                "Computer Science Vol. 3"
+        });
+        uwon.newLibrary(l1);
+        uwon.newLibrary(l2);
+        uwon.newLibrary(l3);
+        // Initializing partner library.
+        University partner = new University();
+        Library l4 = new Library();
+        l4.populateBook(new String[] {
+                "Bible Of Mice Vol. 3"
+        });
+        partner.newLibrary(l4);
+        uwon.newPartner(partner);
+
+        /*
+        Now we have a university "uwon" with 3 libraries, and a partner
+        university "partner" with a library of its own. When searching,
+        all libraries in the university and all of its partners will be
+        searched.
+        */
+
+        // If "The Bible" is searched we can expect to find "The Bible".
+        ArrayList<String> test = new ArrayList<String>(List.of("The Bible"));
+        assertEquals(test, uwon.findBook("The Bible"));
+        // If "Alice In" is searched we can expect to find "Alice in Wonderland".
+        test = new ArrayList<String>(Arrays.asList("Alice in Wonderland"));
+        assertEquals(test, uwon.findBook("Alice In"));
+        // If "bibl" is searched we can expect to find "The Bible" and "Bible Of Mice Vol. 3".
+        test = new ArrayList<String>(Arrays.asList("The Bible", "Bible Of Mice Vol. 3"));
+        assertEquals(test, uwon.findBook("bibl"));
+        // If "3" is searched we can expect to find "Computer Science Vol. 3" and "Bible Of Mice Vol. 3".
+        test = new ArrayList<String>(Arrays.asList("Computer Science Vol. 3", "Bible Of Mice Vol. 3"));
+        assertEquals(test, uwon.findBook("3"));
+        // If there are no matching results, an exception will be thrown.
+        assertThrows(Exception.class, ()-> { uwon.findBook("Harry Potter"); } );
+    }
+    // ===================================== End of Aaron =========================================== //
 }

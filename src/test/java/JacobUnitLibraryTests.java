@@ -16,7 +16,10 @@ import java.util.HashMap;
 
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
@@ -146,33 +149,64 @@ public class JacobUnitLibraryTests {
 
 
     // ===================================== Milan =========================================== //
-    // Problem 8:
-    // ●    Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
-    //      found at the appropriate place on the shelves.
-
-    // Approach:
-    // Since the book is not found in the correct place on the shelf, suggests to me that there are
-    // two separate naming and sorting convention hosted.
-    // To simplify this we will standardize it and will do it by ascending alphabetical order.
-    @DisplayName("Problem 8: \n Sorting Algorithm")
-    @Test
-    public void test(){
-        Book[] books = new Book[10];
-//        books.sort();
-
-
-    }
-
     // Problem 9:
     // ●    Bibliographical search restricted to library opening hours. Slow, tedious
     //      bibliographical search due to manipulation of card indexes
     //
-    //
-    @DisplayName("Problem 9: \n Search Speed Test")
+    // Approach:
+    // We are going
+    // two separate naming and sorting convention hosted.
+    // To simplify this we will standardize it and will do it by ascending alphabetical order.
+
+    @DisplayName("9.1.1: Test if Linear finds books")
     @ParameterizedTest
     @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
-    @Timeout(1)
-    public void testSpeedOfTwoSearches(String animal) throws FileNotFoundException {
+    public void isSearchResultFoundByLinearSearch(String animal){
+        Book animals = new Book();
+        animals.addBibliography(animal);
+        Library uwon = new Library();
+
+        assertTrue( uwon.linearSearch(animals.getBibliography().get(0)) );
+
+    }
+
+    @DisplayName("9.1.2: Test if Binary finds books")
+    @ParameterizedTest
+    @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
+    public void isSearchFoundByBinarySearch(String animal){
+        Book animals = new Book();
+        animals.addBibliography(animal);
+        Library uwon = new Library();
+
+        assertTrue( uwon.binarySearch(animals.getBibliography().get(0)) );
+    }
+
+    @DisplayName("9.2.1: Test if Linear Fails to find books")
+    @ParameterizedTest
+    @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
+    public void isFailFindLinear(String animal){
+        Book animals = new Book();
+        animals.addBibliography(animal);
+        Library uwon = new Library();
+
+        assertFalse( uwon.linearSearch(animals.getBibliography().get(0)) );
+    }
+
+    @DisplayName("9.2.2: Test if Binary Fails to find books")
+    @ParameterizedTest
+    @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
+    public void isFailFindBinary(String animal){
+        Book animals = new Book();
+        animals.addBibliography(animal);
+        Library uwon = new Library();
+
+        assertFalse( uwon.binarySearch(animals.getBibliography().get(0)) );
+    }
+
+    @DisplayName("9.3.1: Search Speed Test for books found")
+    @ParameterizedTest
+    @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
+    public void testSpeedOfTwoSearches(String animal) {
         Book animals = new Book();
         animals.addBibliography(animal);
         Library uwon = new Library();
@@ -194,13 +228,86 @@ public class JacobUnitLibraryTests {
         Duration linearSearchTime = Duration.between(start, end);
 
 
-        ///* Here is a neat Trick: you can comment out this block of code by removing //
+        /* Here is a neat Trick: you can comment out this block of code by removing //
         System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
         System.out.println("Linear search took: " + linearSearchTime.toNanos() + " nanoseconds");
         //*/
 
         assertTrue(binarySearchTime.toNanos() <= linearSearchTime.toNanos());
     }
+
+    @DisplayName("9.3.2: Search Speed Test for books not found")
+    @ParameterizedTest
+    @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
+    public void testSpeedOfTwoFailedSearches(String animal) {
+        Book animals = new Book();
+        animals.addBibliography(animal);
+        Library uwon = new Library();
+
+        // Speed of Binary
+        Instant start = Instant.now();
+        uwon.binarySearch(animals.getBibliography().get(0));
+        Instant end = Instant.now();
+
+        // Print speed of Binary and calculate it
+        Duration binarySearchTime = Duration.between(start, end);
+
+        // Speed of Linear Search
+        start = Instant.now();
+        uwon.linearSearch(animals.getBibliography().get(0));
+        end = Instant.now();
+
+        // Print speed of
+        Duration linearSearchTime = Duration.between(start, end);
+
+
+        /* Here is a neat Trick: you can comment out this block of code by removing //
+        System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
+        System.out.println("Linear search took: " + linearSearchTime.toNanos() + " nanoseconds");
+        //*/
+
+        assertTrue(binarySearchTime.toNanos() <= linearSearchTime.toNanos());
+    }
+
+
+    // Problem 10:
+    // ●    Inaccurate search results, due to poor classification of books, journals or
+    //      proceedings within departments.
+    //
+    // Approach:
+    //      So this sounds like there is a mix of books and journals in a set of collection.
+    //      A possible solution is to split up the collection into two groups: Books and Journals.
+    //      When you are searching, you will have to select which type you want and it will automatically look at that data set.
+    @Mock
+    ArrayList<Object> shelf;
+    @DisplayName("Problem 10: Splitting books into two sets")
+    @ParameterizedTest
+    @CsvFileSource(resources = "/bookTest.csv", numLinesToSkip = 1, delimiter = ',')
+    public void splitTheBooks(String input, String output){
+        String[] data = output.split(":");
+
+        String title = data[0];
+        String author = data[1];
+
+        Object textBook = null;
+        if(input.equals("book")){
+            textBook = new Book(title, author);
+        } else if (input.equals("journal")) {
+            textBook = new Journal(title, author);
+        }
+
+        String type = null;
+        if(textBook instanceof Book){
+            type = "Book";
+        }else if(textBook instanceof Journal){
+            type = "Journal";
+        }
+
+        assertEquals(input.toLowerCase(), type.toLowerCase());
+
+    }
+
+
     // ===================================== End of Milan =========================================== //
 
     /*

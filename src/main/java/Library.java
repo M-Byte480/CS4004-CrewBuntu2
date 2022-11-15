@@ -108,8 +108,14 @@ public class Library {
         return false;
     }
 
-    public boolean binarySearch(String name) throws FileNotFoundException {
-        return -1 < Collections.binarySearch(bibliography, name);
+    public boolean binarySearch(String name)  {
+
+        try {
+            return -1 < Collections.binarySearch(bibliography, name);
+        }catch (Exception ignore){
+
+        }
+        return false;
     }
 
     private static ArrayList<String> populate() throws FileNotFoundException {
@@ -123,9 +129,6 @@ public class Library {
     }
 
 
-    public ArrayList<String> getBibliography() {
-        return bibliography;
-    }
 
     public void addLoan(Loan loan) {
         loans.add(new Loan(loan.getLoanee(), loan.getBook(), loan.getStartDate()));

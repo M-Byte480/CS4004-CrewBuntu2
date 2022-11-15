@@ -7,6 +7,7 @@ import java.util.*;
 
 public class Library {
     private ArrayList<String> books;
+    private ArrayList<Book> bookArrayList ;
     private ArrayList<Subscription> subscriptions;
     private ArrayList<String> journalSubs;
     private ArrayList<Student> borrowers;
@@ -35,20 +36,20 @@ public class Library {
         shelves = new ArrayList<Shelf>();
     }
 
-    public void getNewBook(String book) {
+    public void getNewBook(String  book) {
         books.add(book);
     }
 
-    public void populateBook(String[] books) {
-        for(String book : books) {
+    public void populateBook(String [] books) {
+        for (String book : books) {
             this.books.add(book);
         }
     }
 
-    public ArrayList<String> searchBooks (String bookName) {
-        ArrayList<String> books = new ArrayList<String>();
+    public ArrayList<String> searchBooks(String bookName) {
+        ArrayList<String> books = new ArrayList<>();
         for (String book : this.books) {
-            if (book.toLowerCase().indexOf(bookName.toLowerCase()) != -1) {
+            if (book.indexOf(bookName.toLowerCase()) != -1) {
                 books.add(book);
             }
         }
@@ -77,13 +78,11 @@ public class Library {
     }
 
 
-
-
     public ArrayList<String> getBooks() {
         return books;
     }
 
-    public void borrow(String book, String studentName, int daysUntilDue){
+    public void borrow(String book, String studentName, int daysUntilDue) {
         Student borrower = new Student(book, studentName, daysUntilDue);
         borrowers.add(borrower);
     }
@@ -160,6 +159,8 @@ public class Library {
 
 
     //----------------------SUBSCRIPTIONS-----------------------------------------
+
+
     public void addASubscription(Subscription s) {
         if (subscriptions.contains(s)) {
         } else {
@@ -168,15 +169,39 @@ public class Library {
 
     }
 
-    public boolean inOtherLibsSubscription(Subscription subscription, Library l) {
-        if (l.getJournalSubs().contains(subscription)) {
-            return true;
-        } else {
-            return false;
-        }
+    public ArrayList<Subscription> getSubs() {
+        return subscriptions ;
     }
-    //-----------------------------------------------------SHELVES----------------------------------------
+    public boolean inOtherLibsSubscription(Subscription subscription, Library l) {
+        boolean check = false;
+        if (l.getSubs().contains(subscription)){
+            subscriptions.remove(subscription);
+            check = true;
+    }
+        return check;
+}
+    //-----------------------------------------------------Book----------------------------------------
+    public void lendABookOfInterest(Book s) {
+        if (bookArrayList.contains(s)) {
+        } else {
+            bookArrayList.add(s);
+        }
 
+    }
+
+    public ArrayList<String> getBook() {
+        return books ;
+    }
+    public boolean inOtherLibsShelf(Book  s, Library l) {
+        boolean check = false;
+        if (l.getSubs().contains(s)){
+            subscriptions.remove(s);
+            check = true;
+        }
+        return check;
+    }
+
+    //-----------------------------------------------------SHELVES----------------------------------------
 
 
     public void newShelf(Shelf s) {
@@ -184,8 +209,8 @@ public class Library {
     }
 
 
-    public void addNewBooksToSystem(Book b, Shelf s){
-        if(shelves.contains(s)){
+    public void addNewBooksToSystem(Book b, Shelf s) {
+        if (shelves.contains(s)) {
             s.addBookToShelf(b);
             b.setShelfWhereStored(s);
         }
@@ -193,7 +218,7 @@ public class Library {
 
     public boolean checkShelfForBook(Book book) {
         boolean bookAvailable = false;
-        if(book.getShelfWhereStored() != null && book.getShelfWhereStored().getBooks().contains(book) ){
+        if (book.getShelfWhereStored() != null && book.getShelfWhereStored().getBooks().contains(book)) {
             bookAvailable = true;
             return bookAvailable;
         }
@@ -204,21 +229,22 @@ public class Library {
     public boolean checkBookInLibrary(Book book) {
         boolean bookAvailable = false;
         for (Shelf s : shelves) {
-        for (Book b : s.getBooks()) {
-            if (b.equals(book)) {
-                bookAvailable = true;
+            for (Book b : s.getBooks()) {
+                if (b.equals(book)) {
+                    bookAvailable = true;
+                }
             }
-        }
         }
         return bookAvailable;
 
     }
+
     public boolean addBorrower(String bookName, Student student) {
         borrowInstances.putIfAbsent(bookName, new ArrayList<Student>());
         String name = student.getName();
         ArrayList<String> borrowers = getBorrowerHistory(bookName);
         int counter = 0;
-        for (String borrower: borrowers) {
+        for (String borrower : borrowers) {
             if (borrower.equals(name)) {
                 counter++;
             }
@@ -233,7 +259,7 @@ public class Library {
     public ArrayList<String> getBorrowerHistory(String bookName) {
         ArrayList<String> borrowers = new ArrayList<String>();
         ArrayList<Student> students = borrowInstances.get(bookName);
-        for (Student student: students) {
+        for (Student student : students) {
             borrowers.add(student.getName());
         }
         return borrowers;

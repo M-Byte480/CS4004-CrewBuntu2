@@ -7,15 +7,19 @@ public class University {
     private ArrayList<Library> libraries;
     private ArrayList<University> partners;
 
-    public University(){
+    public University() {
         libraries = new ArrayList<Library>();
         partners = new ArrayList<University>();
     }
 
     //adding a new library to partners
-    public void newLibrary(Library l) { libraries.add(l); }
+    public void newLibrary(Library l) {
+        libraries.add(l);
+    }
 
-    public void newPartner(University u) { partners.add(u); }
+    public void newPartner(University u) {
+        partners.add(u);
+    }
 
     public ArrayList<University> getPartners() {
         return partners;
@@ -49,15 +53,15 @@ public class University {
     //go through every library
     //if library contains book don't add it
     //if it doesn't add it to specified library
-    public boolean getBookForLib(Library l, String book){
+    public boolean getBookForLib(Library l, String book) {
         boolean addIt = true;
-        for(int i = 0; i < libraries.size(); i++){
-            if(l.inOtherLibs(book, libraries.get(i))){
+        for (int i = 0; i < libraries.size(); i++) {
+            if (l.inOtherLibs(book, libraries.get(i))) {
                 addIt = false;
                 break;
             }
         }
-        if(addIt == true){
+        if (addIt == true) {
             l.getNewBook(book);
         }
         return addIt;
@@ -66,15 +70,15 @@ public class University {
     //go through every library
     //if library contains subscription don't add it
     //if it doesn't add it to specified library
-    public boolean subscribe(Library l, String journal){
+    public boolean subscribe(Library l, String journal) {
         boolean addIt = true;
-        for(int i = 0; i < libraries.size(); i++){
-            if(l.inOtherLibsJournal(journal, libraries.get(i))){
+        for (int i = 0; i < libraries.size(); i++) {
+            if (l.inOtherLibsJournal(journal, libraries.get(i))) {
                 addIt = false;
                 break;
             }
         }
-        if(addIt == true){
+        if (addIt == true) {
             l.subscribe(journal);
         }
         return addIt;
@@ -85,18 +89,54 @@ public class University {
     //add all librarys to university
     //add university to partners
     //add this university to partners
-    public void joinUni(University u){
+    public void joinUni(University u) {
         libraries.addAll(u.getLibraries());
         u.getLibraries().addAll(libraries);
         partners.add(u);
         u.getPartners().add(this);
     }
 
-    public boolean getSubscriptionForLib(Library l2, Subscription davidWalliams) {
-        return false;
+    //----------------------SUBSCRIPTIONS-----------------------------------------
+    public boolean getSubscriptionForLib(Library l, Subscription s) {
+        boolean bookAvailable = false;
+        for (int i = 0; i < libraries.size(); i++) {
+            if (l.inOtherLibsSubscription(s, libraries.get(i)) == true) {
+                l.addASubscription(s);
+                bookAvailable = true;
+            } else {
+                bookAvailable = false;
+            }
+        }
+
+        return bookAvailable;
     }
 
-    public boolean checkUniversityForBook(Book bobo) {
-        return false;
+    //-----------------------------------------------------Book----------------------------------------
+    public boolean getBookForLib(Library l, Book s) {
+        boolean bookAvailable = false;
+        for (int i = 0; i < libraries.size(); i++) {
+            if (l.inOtherLibsShelf(s, libraries.get(i)) == true) {
+                l.lendABookOfInterest(s);
+                bookAvailable = true;
+            } else {
+                bookAvailable = false;
+            }
+        }
+
+        return bookAvailable;
+    }
+    //-----------------------------------------------------SHELVES----------------------------------------
+    public boolean checkUniversityForBook(Book book) {
+        boolean bookAvailable = true;
+        for (Library l : libraries) {
+            if (l.checkShelfForBook(book)) {
+                bookAvailable = true;
+            } else {
+                bookAvailable = false;
+            }
+
+        }
+        return bookAvailable;
+
     }
 }

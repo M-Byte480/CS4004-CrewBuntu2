@@ -89,7 +89,9 @@ public class JacobUnitLibraryTests {
         University u2 = new University();
         u1.joinUni(u2);
         ArrayList<Book> DW = new ArrayList<>();
+        ArrayList<Book> D = new ArrayList<>();
         Subscription davidWalliams = new Subscription("Gangster Granny", DW);
+        Subscription davidWalliam = new Subscription("Gangster Granny", D);
         Library l1 = new Library();
         Library l2 = new Library();
         u2.newLibrary(l1);
@@ -106,6 +108,16 @@ public class JacobUnitLibraryTests {
         University UL = new University();
         University LSAD = new University();
         LSAD.joinUni(UL);
+
+        Library bugLibrary = new Library();
+        Library artStudentBodyOdour = new Library();
+        UL.newLibrary(bugLibrary);
+        LSAD.newLibrary(artStudentBodyOdour);
+        ArrayList<Book> bugBook= new ArrayList<>();
+        Shelf bugShelf= new Shelf("Bugs", bugBook );
+        Book Worms = new Book();
+        bugShelf.addBookToShelf(Worms);
+
 
 
 
@@ -256,7 +268,7 @@ public class JacobUnitLibraryTests {
      (Books etc. being indexed in other libraries) Let's say that there are a set amount
      of UWON department libraries, e.g. 3. When searching for books etc., we will search
      each library for results and display a list of matching searches.
-
+go
      (Unavailability of books) A book may be unavailable at UWON but available in partner
      libraries, so we will also check those in our search.
 

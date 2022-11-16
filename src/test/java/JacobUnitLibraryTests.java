@@ -1,18 +1,17 @@
-import net.bytebuddy.asm.Advice;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import java.util.*;
 
-import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,6 +20,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
@@ -170,49 +170,51 @@ public class JacobUnitLibraryTests {
     // two separate naming and sorting convention hosted.
     // To simplify this we will standardize it and will do it by ascending alphabetical order.
 
+    @Mock
+    Book spyAnimal = new Book();
+
     @DisplayName("9.1.1: Test if Linear finds books")
     @ParameterizedTest
     @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
     public void isSearchResultFoundByLinearSearch(String animal){
-        Book animals = new Book();
-        animals.addBibliography(animal);
+        when(spyAnimal.getBibliography()).thenReturn(animal);
+
         Library uwon = new Library();
 
-        assertTrue( uwon.linearSearch(animals.getBibliography().get(0)) );
-
+        assertTrue( uwon.linearSearch(spyAnimal.getBibliography()) );  // Gets first bibliography of the book
     }
 
     @DisplayName("9.1.2: Test if Binary finds books")
     @ParameterizedTest
     @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
     public void isSearchFoundByBinarySearch(String animal){
-        Book animals = new Book();
-        animals.addBibliography(animal);
+        when(spyAnimal.getBibliography()).thenReturn(animal);
+
         Library uwon = new Library();
 
-        assertTrue( uwon.binarySearch(animals.getBibliography().get(0)) );
+        assertTrue( uwon.binarySearch(spyAnimal.getBibliography()) );
     }
 
     @DisplayName("9.2.1: Test if Linear Fails to find books")
     @ParameterizedTest
     @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
     public void isFailFindLinear(String animal){
-        Book animals = new Book();
-        animals.addBibliography(animal);
+        when(spyAnimal.getBibliography()).thenReturn(animal);
+
         Library uwon = new Library();
 
-        assertFalse( uwon.linearSearch(animals.getBibliography().get(0)) );
+        assertFalse( uwon.linearSearch(spyAnimal.getBibliography() ));
     }
 
     @DisplayName("9.2.2: Test if Binary Fails to find books")
     @ParameterizedTest
     @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
     public void isFailFindBinary(String animal){
-        Book animals = new Book();
-        animals.addBibliography(animal);
+        when(spyAnimal.getBibliography()).thenReturn(animal);
+
         Library uwon = new Library();
 
-        assertFalse( uwon.binarySearch(animals.getBibliography().get(0)) );
+        assertFalse( uwon.binarySearch(spyAnimal.getBibliography()) );
     }
 
     @DisplayName("9.3.1: Search Speed Test for books found")
@@ -225,20 +227,17 @@ public class JacobUnitLibraryTests {
 
         // Speed of Binary
         Instant start = Instant.now();
-        uwon.binarySearch(animals.getBibliography().get(0));
+        uwon.binarySearch(animals.getBibliographies().get(0));
         Instant end = Instant.now();
 
-        // Print speed of Binary and calculate it
         Duration binarySearchTime = Duration.between(start, end);
 
         // Speed of Linear Search
         start = Instant.now();
-        uwon.linearSearch(animals.getBibliography().get(0));
+        uwon.linearSearch(animals.getBibliographies().get(0));
         end = Instant.now();
 
-        // Print speed of
         Duration linearSearchTime = Duration.between(start, end);
-
 
         /* Here is a neat Trick: you can comment out this block of code by removing //
         System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
@@ -258,7 +257,7 @@ public class JacobUnitLibraryTests {
 
         // Speed of Binary
         Instant start = Instant.now();
-        uwon.binarySearch(animals.getBibliography().get(0));
+        uwon.binarySearch(animals.getBibliographies().get(0));
         Instant end = Instant.now();
 
         // Print speed of Binary and calculate it
@@ -266,7 +265,7 @@ public class JacobUnitLibraryTests {
 
         // Speed of Linear Search
         start = Instant.now();
-        uwon.linearSearch(animals.getBibliography().get(0));
+        uwon.linearSearch(animals.getBibliographies().get(0));
         end = Instant.now();
 
         // Print speed of
@@ -290,11 +289,19 @@ public class JacobUnitLibraryTests {
     //      So this sounds like there is a mix of books and journals in a set of collection.
     //      A possible solution is to split up the collection into two groups: Books and Journals.
     //      When you are searching, you will have to select which type you want and it will automatically look at that data set.
-    @Mock
-    ArrayList<Object> shelf;
-    @DisplayName("Problem 10: Splitting books into two sets")
+
+    @DisplayName("10.0.0: Splitting books into two sets")
     @ParameterizedTest
-    @CsvFileSource(resources = "/bookTest.csv", numLinesToSkip = 1, delimiter = ',')
+    @CsvSource(value = {
+            "book,The Milk:Boris",
+            "book,Oregon:Hans",
+            "journal,What is popping:Kevin" ,
+            "journal,Hello World! Every Programmers favourite program:Milan Kovacs" ,
+            "book,Maker of all:Adam" ,
+            "journal,Brny's Wrld! Top 50:Breny" ,
+            "book,The meaning of life:Italo" ,
+            "journal,Ich Liebe Dich:Perto"
+    })
     public void splitTheBooks(String input, String output){
         String[] data = output.split(":");
 
@@ -315,10 +322,8 @@ public class JacobUnitLibraryTests {
             type = "Journal";
         }
 
-        assertEquals(input.toLowerCase(), type.toLowerCase());
-
+        assertEquals(type.toLowerCase(), input.toLowerCase());
     }
-
 
     // ===================================== End of Milan =========================================== //
 

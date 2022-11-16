@@ -11,7 +11,6 @@ public class Library {
     private ArrayList<Subscription> subscriptions;
     private ArrayList<String> journalSubs;
     private ArrayList<Student> borrowers;
-    private static final ArrayList<String> bibliography;
     private ArrayList<Reminder> reminders;
     private ArrayList<Loan> loans;
     private static ArrayList<EBookRequest> requestsForEBooks;
@@ -20,6 +19,8 @@ public class Library {
 
     private HashMap<String, ArrayList<Student>> borrowInstances = new HashMap<String, ArrayList<Student>>();
 
+
+    private static final ArrayList<String> bibliography;
     static {
         try {
             bibliography = populate();
@@ -36,7 +37,7 @@ public class Library {
         shelves = new ArrayList<Shelf>();
     }
 
-    public void getNewBook(String  book) {
+    public void getNewBook(String book) {
         books.add(book);
     }
 

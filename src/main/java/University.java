@@ -70,7 +70,7 @@ public class University {
     //go through every library
     //if library contains subscription don't add it
     //if it doesn't add it to specified library
-    public boolean subscribe(Library l, String journal) {
+    public boolean subscribe(Library l, Journal journal) {
         boolean addIt = true;
         for (int i = 0; i < libraries.size(); i++) {
             if (l.inOtherLibsJournal(journal, libraries.get(i))) {
@@ -78,7 +78,7 @@ public class University {
                 break;
             }
         }
-        if (addIt == true) {
+        if (addIt) {
             l.subscribe(journal);
         }
         return addIt;

@@ -34,9 +34,6 @@ public class Journal {
         this.author = author;
     }
 
-
-
-
     public void journalDelivery() {
         subscriptionMonths--;
     }

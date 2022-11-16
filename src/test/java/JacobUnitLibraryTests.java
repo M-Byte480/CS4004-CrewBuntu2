@@ -2,6 +2,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
@@ -52,10 +53,11 @@ public class JacobUnitLibraryTests {
         University ul = new University();
         Library l1 = new Library();
         ul.newLibrary(l1);
-        ul.subscribe(l1, "Christianity Monthly");
+        Journal christianity = new Journal("Christianity Monthly", true);
+        ul.subscribe(l1, christianity);
         Library l2 = new Library();
         ul.newLibrary(l2);
-        assertFalse(ul.subscribe(l2, "Christianity Monthly"));
+        assertFalse(ul.subscribe(l2, christianity));
     }
 
     @Test
@@ -299,8 +301,7 @@ public class JacobUnitLibraryTests {
             "journal,Hello World! Every Programmers favourite program:Milan Kovacs" ,
             "book,Maker of all:Adam" ,
             "journal,Brny's Wrld! Top 50:Breny" ,
-            "book,The meaning of life:Italo" ,
-            "journal,Ich Liebe Dich:Perto"
+            "book,The meaning of life:Italo" ,            "journal,Ich Liebe Dich:Perto"
     })
     public void splitTheBooks(String input, String output){
         String[] data = output.split(":");

@@ -97,34 +97,29 @@ public class University {
     }
 
     //----------------------SUBSCRIPTIONS-----------------------------------------
-    public boolean getSubscriptionForLib(Library l, Subscription s) {
+    public boolean getSubscriptionForLib(Subscription s) {
         boolean bookAvailable = false;
-        for (int i = 0; i < libraries.size(); i++) {
-            if (l.inOtherLibsSubscription(s, libraries.get(i)) == true) {
-                l.addASubscription(s);
+        for (Library library : libraries) {
+            if (library.inOtherLibsSubscription(s, library) == true) {
                 bookAvailable = true;
-            } else {
-                bookAvailable = false;
             }
         }
-
         return bookAvailable;
     }
 
     //-----------------------------------------------------Book----------------------------------------
-    public boolean getBookForLib(Library l, Book s) {
+    public boolean getBookForLib(Book s) {
         boolean bookAvailable = false;
-        for (int i = 0; i < libraries.size(); i++) {
-            if (l.inOtherLibsShelf(s, libraries.get(i)) == true) {
-                l.lendABookOfInterest(s);
+        for (Library library : libraries) {
+            if (library.inOtherLibsShelf(s, library) == true) {
                 bookAvailable = true;
-            } else {
-                bookAvailable = false;
+                return bookAvailable;
             }
         }
-
         return bookAvailable;
     }
+
+
     //-----------------------------------------------------SHELVES----------------------------------------
     public boolean checkUniversityForBook(Book book) {
         boolean bookAvailable = true;

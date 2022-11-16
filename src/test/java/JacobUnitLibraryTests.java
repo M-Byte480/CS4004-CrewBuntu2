@@ -1,4 +1,3 @@
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -6,23 +5,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import java.util.*;
 
 import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
 /**
- *
  * @author 21308128
  */
 @ExtendWith(MockitoExtension.class)
@@ -79,6 +76,14 @@ public class JacobUnitLibraryTests {
     }
 
     // ===================================== Breny =========================================== //
+    @Test
+    @DisplayName("Check Person For Admin Permissions")
+    public void checkPrivelidges () {
+        Person andy = new Person("andy" , true);
+        Person tom = new Person("Tom", false);
+        assertTrue(andy.isAdmin());
+    }
+
     //Complaint 5
     //Subscription to journals of marginal interest to the university, which could be
     //accessed in other universities with which UWON has an agreement.
@@ -87,67 +92,70 @@ public class JacobUnitLibraryTests {
     public void subscriptionsAcrossUWON() {
         University u1 = new University();
         University u2 = new University();
-        u1.joinUni(u2);
-        ArrayList<Book> DW = new ArrayList<>();
-        ArrayList<Book> D = new ArrayList<>();
-        Subscription davidWalliams = new Subscription("Gangster Granny", DW);
-        Subscription davidWalliam = new Subscription("Gangster Granny", D);
         Library l1 = new Library();
         Library l2 = new Library();
         u2.newLibrary(l1);
         u2.newLibrary(l2);
+        u1.joinUni(u2);
+        ArrayList<Book> DW = new ArrayList<>();
+        ArrayList<Book> D = new ArrayList<>();
+        Subscription davidWalliams = new Subscription("Gangster Granny", DW);
+
+
         l1.addASubscription(davidWalliams);
-        assertTrue(u2.getSubscriptionForLib(l2, davidWalliams));
+        assertTrue(u2.getSubscriptionForLib(davidWalliams));
     }
+
     //Complaint 6
     //Acquisition of books or proceedings of marginal interest to the university, which
     //could be borrowed from other universities with which UWON has an agreement.
     @Test
     @DisplayName("Check to see if subscription is available in UWON")
-    public void sendingCompSciBooksFromLSADToUL () {
+    public void sendingCompSciBooksFromLSADToUL() {
         University UL = new University();
         University LSAD = new University();
-        LSAD.joinUni(UL);
 
         Library bugLibrary = new Library();
         Library artStudentBodyOdour = new Library();
+
         UL.newLibrary(bugLibrary);
         LSAD.newLibrary(artStudentBodyOdour);
-        ArrayList<Book> bugBook= new ArrayList<>();
-        Shelf bugShelf= new Shelf("Bugs", bugBook );
-        Book Worms = new Book();
-        bugShelf.addBookToShelf(Worms);
 
+        LSAD.joinUni(UL);
 
+        Book Worms = new Book("Bugs", "Breny");
+        bugLibrary.addBookTOLibrary(Worms);
 
+        boolean temp = LSAD.getBookForLib(Worms);
 
-    }
+        assertTrue(temp);
+}
     //Complaint 7
     //Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
     //found at the appropriate place on the shelves.
     @Test
     @DisplayName("Problem 7 : Innacuracy of book being on specified shelf")
-    public void bookOnShelFinder(){
+    public void bookOnShelFinder() {
         University BrenysWRLD = new University();
         Library BookRoom = new Library();
         BrenysWRLD.newLibrary(BookRoom);
 
-        ArrayList<Book> AnimeArraylist = new ArrayList<>() ;
-        Book Yugioh = new Book("Yu-gi-oh","Kazuki Takahashi");
+        ArrayList<Book> AnimeArraylist = new ArrayList<>();
+        Book Yugioh = new Book("Yu-gi-oh", "Kazuki Takahashi");
         AnimeArraylist.add(Yugioh);
         Shelf Anime = new Shelf("Amine", AnimeArraylist);
         BookRoom.newShelf(Anime);
 
-        ArrayList<Book> OverwatchArraylist = new ArrayList<>() ;
-        Book Monke = new Book("Monke","Winston");
+        ArrayList<Book> OverwatchArraylist = new ArrayList<>();
+        Book Monke = new Book("Monke", "Winston");
         OverwatchArraylist.add(Monke);
         Shelf Overwatch = new Shelf("Overwatch", OverwatchArraylist);
         BookRoom.newShelf(Overwatch);
 
-        BookRoom.addNewBooksToSystem(Monke,Overwatch);
+        BookRoom.addNewBooksToSystem(Monke, Overwatch);
 
-        Book bobo = new Book("Monke","Winston");
-        BookRoom.addNewBooksToSystem(bobo,Overwatch);
+        Book bobo = new Book("Monke", "Winston");
+        BookRoom.addNewBooksToSystem(bobo, Overwatch);
         BookRoom.newShelf(Anime);
         BookRoom.newShelf(Overwatch);
         BrenysWRLD.newLibrary(BookRoom);
@@ -168,7 +176,7 @@ public class JacobUnitLibraryTests {
     // To simplify this we will standardize it and will do it by ascending alphabetical order.
     @DisplayName("Problem 8: \n Sorting Algorithm")
     @Test
-    public void test(){
+    public void test() {
         Book[] books = new Book[10];
 //        books.sort();
 
@@ -282,16 +290,16 @@ go
         Library l1 = new Library();
         Library l2 = new Library();
         Library l3 = new Library();
-        l1.populateBook(new String[] {
+        l1.populateBook(new String[]{
                 "The Bible",
                 "Of Mice And Men",
                 "Winnie The Pooh"
         });
-        l2.populateBook(new String[] {
+        l2.populateBook(new String[]{
                 "The Bible",
                 "Alice in Wonderland",
         });
-        l3.populateBook(new String[] {
+        l3.populateBook(new String[]{
                 "Computer Science Vol. 3"
         });
         uwon.newLibrary(l1);
@@ -300,7 +308,7 @@ go
         // Initializing partner library.
         University partner = new University();
         Library l4 = new Library();
-        l4.populateBook(new String[] {
+        l4.populateBook(new String[]{
                 "Bible Of Mice Vol. 3"
         });
         partner.newLibrary(l4);
@@ -326,7 +334,9 @@ go
         test = new ArrayList<String>(Arrays.asList("Computer Science Vol. 3", "Bible Of Mice Vol. 3"));
         assertEquals(test, uwon.findBook("3"));
         // If there are no matching results, an exception will be thrown.
-        assertThrows(Exception.class, ()-> { uwon.findBook("Harry Potter"); } );
+        assertThrows(Exception.class, () -> {
+            uwon.findBook("Harry Potter");
+        });
     }
     // ===================================== End of Aaron =========================================== //
 }

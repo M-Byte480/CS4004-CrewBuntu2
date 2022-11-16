@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Library {
     private ArrayList<String> books;
-    private ArrayList<Book> bookArrayList ;
+    private ArrayList<Book> bookArrayList;
     private ArrayList<Subscription> subscriptions;
     private ArrayList<String> journalSubs;
     private ArrayList<Student> borrowers;
@@ -29,27 +29,28 @@ public class Library {
     }
 
     public Library() {
-        books = new ArrayList<String>();
+        bookArrayList = new ArrayList<>();
+        books = new ArrayList<>();
         subscriptions = new ArrayList<Subscription>();
         journalSubs = new ArrayList<String>();
         borrowers = new ArrayList<Student>();
         shelves = new ArrayList<Shelf>();
     }
 
-    public void getNewBook(String  book) {
+    public void getNewBook(String book) {
         books.add(book);
     }
 
-    public void populateBook(String [] books) {
+    public void populateBook(String[] books) {
         for (String book : books) {
             this.books.add(book);
         }
     }
 
     public ArrayList<String> searchBooks(String bookName) {
-        ArrayList<String> books = new ArrayList<>();
+        ArrayList<String> books = new ArrayList<String>();
         for (String book : this.books) {
-            if (book.indexOf(bookName.toLowerCase()) != -1) {
+            if (book.toLowerCase().indexOf(bookName.toLowerCase()) != -1) {
                 books.add(book);
             }
         }
@@ -159,42 +160,32 @@ public class Library {
 
 
     public void addASubscription(Subscription s) {
-        if (subscriptions.contains(s)) {
+        if (getSubscriptions().contains(s)) {
         } else {
-            subscriptions.add(s);
+            getSubscriptions().add(s);
         }
-
     }
 
-    public ArrayList<Subscription> getSubs() {
-        return subscriptions ;
+    public ArrayList<Subscription> getSubscriptions() {
+        return subscriptions;
     }
+
     public boolean inOtherLibsSubscription(Subscription subscription, Library l) {
-        boolean check = false;
-        if (l.getSubs().contains(subscription)){
-            subscriptions.remove(subscription);
-            check = true;
-    }
+        boolean check = l.getSubscriptions().contains(subscription);
         return check;
-}
+    }
+
     //-----------------------------------------------------Book----------------------------------------
-    public void lendABookOfInterest(Book s) {
-        if (bookArrayList.contains(s)) {
-        } else {
-            bookArrayList.add(s);
-        }
-
+    public void addBookTOLibrary(Book s) {
+        bookArrayList.add(s);
+    }
+    public ArrayList<Book> getBookArrayList() {
+        return bookArrayList;
     }
 
-    public ArrayList<String> getBook() {
-        return books ;
-    }
-    public boolean inOtherLibsShelf(Book  s, Library l) {
-        boolean check = false;
-        if (l.getSubs().contains(s)){
-            subscriptions.remove(s);
-            check = true;
-        }
+    public boolean
+    inOtherLibsShelf(Book s, Library l) {
+        boolean check = l.getBookArrayList().contains(s);
         return check;
     }
 

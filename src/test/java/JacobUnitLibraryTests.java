@@ -65,7 +65,21 @@ public class JacobUnitLibraryTests {
         uwon.newLibrary(l2);
         assertFalse(uwon.getBookForLib(l2, "Computer Science for Dummies"));
     }
-
+    
+    @Test
+    @DisplayName("Check for journal duplicates in other Universities")
+    public void testOtherUniJournal(){
+        University ul = new University();
+        University uwon = new University();
+        uwon.joinUni(ul);
+        Library l1 = new Library();
+        ul.newLibrary(l1);
+        l1.subscribe("Mockito Monthly");
+        Library l2 = new Library();
+        uwon.newLibrary(l2);
+        assertFalse(uwon.subscribe(l2, "Mockito Monthly"));
+    }
+    
     @Test
     @DisplayName("Display previous owners")
     public void testShow() {

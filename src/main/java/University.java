@@ -7,9 +7,25 @@ public class University {
     private ArrayList<Library> libraries;
     private ArrayList<University> partners;
 
+    private ArrayList<Person> admins;
+
     public University() {
-        libraries = new ArrayList<Library>();
-        partners = new ArrayList<University>();
+        admins = new ArrayList<>();
+        libraries = new ArrayList<>();
+        partners = new ArrayList<>();
+    }
+
+    public void setAdmins(Person p) {
+        if (p.isAdmin() == true) {
+            admins.add(p);
+        }
+    }
+
+    public boolean checkAdmins(Person p) {
+        if (admins.contains(p)) {
+            return true;
+        }
+        return false;
     }
 
     //adding a new library to partners

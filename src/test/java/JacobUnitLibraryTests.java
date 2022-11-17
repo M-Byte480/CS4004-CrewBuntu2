@@ -74,6 +74,20 @@ public class JacobUnitLibraryTests {
     }
 
     @Test
+    @DisplayName("Check for journal duplicates in other Universities")
+    public void testOtherUniJournal(){
+        University ul = new University();
+        University uwon = new University();
+        uwon.joinUni(ul);
+        Library l1 = new Library();
+        ul.newLibrary(l1);
+        l1.subscribe("Mockito Monthly");
+        Library l2 = new Library();
+        uwon.newLibrary(l2);
+        assertFalse(uwon.subscribe(l2, "Mockito Monthly"));
+    }
+
+    @Test
     @DisplayName("Display previous owners")
     public void testShow() {
         Library l1 = new Library();
@@ -83,6 +97,13 @@ public class JacobUnitLibraryTests {
     }
 
     // ===================================== Breny =========================================== //
+    @Test
+    @DisplayName("Check Person For Admin Permissions")
+    public void checkPrivelidges () {
+        Person andy = new Person("andy" , true);
+        Person tom = new Person("Tom", false);
+        assertTrue(andy.isAdmin());
+    }
     //Complaint 5
     //Subscription to journals of marginal interest to the university, which could be
     //accessed in other universities with which UWON has an agreement.
@@ -91,17 +112,18 @@ public class JacobUnitLibraryTests {
     public void subscriptionsAcrossUWON() {
         University u1 = new University();
         University u2 = new University();
-        u1.joinUni(u2);
-        ArrayList<Book> DW = new ArrayList<>();
-        ArrayList<Book> D = new ArrayList<>();
-        Subscription davidWalliams = new Subscription("Gangster Granny", DW);
-        Subscription davidWalliam = new Subscription("Gangster Granny", D);
         Library l1 = new Library();
         Library l2 = new Library();
         u2.newLibrary(l1);
         u2.newLibrary(l2);
+        u1.joinUni(u2);
+        ArrayList<Book> DW = new ArrayList<>();
+        ArrayList<Book> D = new ArrayList<>();
+        Subscription davidWalliams = new Subscription("Gangster Granny", DW);
+
+
         l1.addASubscription(davidWalliams);
-        assertTrue(u2.getSubscriptionForLib(l2, davidWalliams));
+        assertTrue(u2.getSubscriptionForLib(davidWalliams));
     }
 
     //Complaint 6
@@ -112,10 +134,10 @@ public class JacobUnitLibraryTests {
     public void sendingCompSciBooksFromLSADToUL() {
         University UL = new University();
         University LSAD = new University();
-        LSAD.joinUni(UL);
 
         Library bugLibrary = new Library();
         Library artStudentBodyOdour = new Library();
+
         UL.newLibrary(bugLibrary);
         LSAD.newLibrary(artStudentBodyOdour);
         ArrayList<Book> bugBook = new ArrayList<>();
@@ -123,9 +145,16 @@ public class JacobUnitLibraryTests {
         Book Worms = new Book();
         bugShelf.addBookToShelf(Worms);
 
+        LSAD.joinUni(UL);
 
     }
+        Book Worms = new Book("Bugs", "Breny");
+        bugLibrary.addBookTOLibrary(Worms);
 
+        boolean temp = LSAD.getBookForLib(Worms);
+
+        assertTrue(temp);
+}
     //Complaint 7
     //Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
     //found at the appropriate place on the shelves.

@@ -1,14 +1,14 @@
 public class Student {
     private String borrowedBook;
     private String name;
-    private String borrowDate;
-    private String dueDate;
+    private long borrowDate;
+    private long dueDate;
 
-    public Student(String borrowedBook, String name, String borrowDate, String dueDate) {
+    public Student(String borrowedBook, String name, int daysUntilDue) {
         this.borrowedBook = borrowedBook;
         this.name = name;
-        this.borrowDate = borrowDate;
-        this.dueDate = dueDate;
+        borrowDate = System.currentTimeMillis();
+        dueDate = borrowDate + ((long) daysUntilDue * 24 * 60 * 60 * 1000);
     }
 
     public String getBorrowedBook() {
@@ -19,11 +19,11 @@ public class Student {
         return name;
     }
 
-    public String getBorrowDate() {
+    public long getBorrowDate() {
         return borrowDate;
     }
 
-    public String getDueDate() {
+    public long getDueDate() {
         return dueDate;
     }
 
@@ -31,11 +31,20 @@ public class Student {
         this.name = name;
     }
 
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
+    public void setDueDate(int daysUntilDue) { dueDate = borrowDate + ((long) daysUntilDue * 24 * 60 * 60 * 1000); }
+
+    public void increaseBorrowTime(int days) {
+        borrowDate += ((long) days * 24 * 60 * 60 * 1000 + 1);
+    }
+
+    public boolean checkDue() {
+        if ( borrowDate > dueDate ) {
+            return true;
+        }
+        return false;
     }
     
     public String toString(){
-        return getName() + " " + getBorrowDate() + " " + getDueDate();
+        return getName() + ", " + getBorrowDate() + ", " + getDueDate();
     }
 }

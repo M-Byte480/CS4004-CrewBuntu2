@@ -26,7 +26,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
 /**
- *
  * @author 21308128
  */
 @ExtendWith(MockitoExtension.class)
@@ -104,12 +103,13 @@ public class JacobUnitLibraryTests {
         l1.addASubscription(davidWalliams);
         assertTrue(u2.getSubscriptionForLib(l2, davidWalliams));
     }
+
     //Complaint 6
     //Acquisition of books or proceedings of marginal interest to the university, which
     //could be borrowed from other universities with which UWON has an agreement.
     @Test
     @DisplayName("Check to see if subscription is available in UWON")
-    public void sendingCompSciBooksFromLSADToUL () {
+    public void sendingCompSciBooksFromLSADToUL() {
         University UL = new University();
         University LSAD = new University();
         LSAD.joinUni(UL);
@@ -118,41 +118,40 @@ public class JacobUnitLibraryTests {
         Library artStudentBodyOdour = new Library();
         UL.newLibrary(bugLibrary);
         LSAD.newLibrary(artStudentBodyOdour);
-        ArrayList<Book> bugBook= new ArrayList<>();
-        Shelf bugShelf= new Shelf("Bugs", bugBook );
+        ArrayList<Book> bugBook = new ArrayList<>();
+        Shelf bugShelf = new Shelf("Bugs", bugBook);
         Book Worms = new Book();
         bugShelf.addBookToShelf(Worms);
 
 
-
-
     }
+
     //Complaint 7
     //Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
     //found at the appropriate place on the shelves.
     @Test
     @DisplayName("Problem 7 : Innacuracy of book being on specified shelf")
-    public void bookOnShelFinder(){
+    public void bookOnShelFinder() {
         University BrenysWRLD = new University();
         Library BookRoom = new Library();
         BrenysWRLD.newLibrary(BookRoom);
 
-        ArrayList<Book> AnimeArraylist = new ArrayList<>() ;
-        Book Yugioh = new Book("Yu-gi-oh","Kazuki Takahashi");
+        ArrayList<Book> AnimeArraylist = new ArrayList<>();
+        Book Yugioh = new Book("Yu-gi-oh", "Kazuki Takahashi");
         AnimeArraylist.add(Yugioh);
         Shelf Anime = new Shelf("Amine", AnimeArraylist);
         BookRoom.newShelf(Anime);
 
-        ArrayList<Book> OverwatchArraylist = new ArrayList<>() ;
-        Book Monke = new Book("Monke","Winston");
+        ArrayList<Book> OverwatchArraylist = new ArrayList<>();
+        Book Monke = new Book("Monke", "Winston");
         OverwatchArraylist.add(Monke);
         Shelf Overwatch = new Shelf("Overwatch", OverwatchArraylist);
         BookRoom.newShelf(Overwatch);
 
-        BookRoom.addNewBooksToSystem(Monke,Overwatch);
+        BookRoom.addNewBooksToSystem(Monke, Overwatch);
 
-        Book bobo = new Book("Monke","Winston");
-        BookRoom.addNewBooksToSystem(bobo,Overwatch);
+        Book bobo = new Book("Monke", "Winston");
+        BookRoom.addNewBooksToSystem(bobo, Overwatch);
         BookRoom.newShelf(Anime);
         BookRoom.newShelf(Overwatch);
         BrenysWRLD.newLibrary(BookRoom);
@@ -172,51 +171,52 @@ public class JacobUnitLibraryTests {
     // two separate naming and sorting convention hosted.
     // To simplify this we will standardize it and will do it by ascending alphabetical order.
 
+
     @Mock
     Book spyAnimal = new Book();
 
     @DisplayName("9.1.1: Test if Linear finds books")
     @ParameterizedTest
     @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
-    public void isSearchResultFoundByLinearSearch(String animal){
+    public void isSearchResultFoundByLinearSearch(String animal) {
         when(spyAnimal.getBibliography()).thenReturn(animal);
 
         Library uwon = new Library();
 
-        assertTrue( uwon.linearSearch(spyAnimal.getBibliography()) );  // Gets first bibliography of the book
+        assertTrue(uwon.linearSearch(spyAnimal.getBibliography()));  // Gets first bibliography of the book
     }
 
     @DisplayName("9.1.2: Test if Binary finds books")
     @ParameterizedTest
     @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
-    public void isSearchFoundByBinarySearch(String animal){
+    public void isSearchFoundByBinarySearch(String animal) {
         when(spyAnimal.getBibliography()).thenReturn(animal);
 
         Library uwon = new Library();
 
-        assertTrue( uwon.binarySearch(spyAnimal.getBibliography()) );
+        assertTrue(uwon.binarySearch(spyAnimal.getBibliography()));
     }
 
     @DisplayName("9.2.1: Test if Linear Fails to find books")
     @ParameterizedTest
     @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
-    public void isFailFindLinear(String animal){
+    public void isFailFindLinear(String animal) {
         when(spyAnimal.getBibliography()).thenReturn(animal);
 
         Library uwon = new Library();
 
-        assertFalse( uwon.linearSearch(spyAnimal.getBibliography() ));
+        assertFalse(uwon.linearSearch(spyAnimal.getBibliography()));
     }
 
     @DisplayName("9.2.2: Test if Binary Fails to find books")
     @ParameterizedTest
     @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
-    public void isFailFindBinary(String animal){
+    public void isFailFindBinary(String animal) {
         when(spyAnimal.getBibliography()).thenReturn(animal);
 
         Library uwon = new Library();
 
-        assertFalse( uwon.binarySearch(spyAnimal.getBibliography()) );
+        assertFalse(uwon.binarySearch(spyAnimal.getBibliography()));
     }
 
     @DisplayName("9.3.1: Search Speed Test for books found")
@@ -297,29 +297,30 @@ public class JacobUnitLibraryTests {
     @CsvSource(value = {
             "book,The Milk:Boris",
             "book,Oregon:Hans",
-            "journal,What is popping:Kevin" ,
-            "journal,Hello World! Every Programmers favourite program:Milan Kovacs" ,
-            "book,Maker of all:Adam" ,
-            "journal,Brny's Wrld! Top 50:Breny" ,
-            "book,The meaning of life:Italo" ,            "journal,Ich Liebe Dich:Perto"
+            "journal,What is popping:Kevin",
+            "journal,Hello World! Every Programmers favourite program:Milan Kovacs",
+            "book,Maker of all:Adam",
+            "journal,Brny's Wrld! Top 50:Breny",
+            "book,The meaning of life:Italo",
+            "journal,Ich Liebe Dich:Perto"
     })
-    public void splitTheBooks(String input, String output){
+    public void splitTheBooks(String input, String output) {
         String[] data = output.split(":");
 
         String title = data[0];
         String author = data[1];
 
         Object textBook = null;
-        if(input.equals("book")){
+        if (input.equals("book")) {
             textBook = new Book(title, author);
         } else if (input.equals("journal")) {
             textBook = new Journal(title, author);
         }
 
         String type = null;
-        if(textBook instanceof Book){
+        if (textBook instanceof Book) {
             type = "Book";
-        }else if(textBook instanceof Journal){
+        } else if (textBook instanceof Journal) {
             type = "Journal";
         }
 
@@ -387,6 +388,7 @@ go
 
      */
 
+
     @Test
     @DisplayName("Test for comprehensive search results.")
     public void testForComprehensiveSearchResults() throws Exception {
@@ -395,16 +397,16 @@ go
         Library l1 = new Library();
         Library l2 = new Library();
         Library l3 = new Library();
-        l1.populateBook(new String[] {
+        l1.populateBook(new String[]{
                 "The Bible",
                 "Of Mice And Men",
                 "Winnie The Pooh"
         });
-        l2.populateBook(new String[] {
+        l2.populateBook(new String[]{
                 "The Bible",
                 "Alice in Wonderland",
         });
-        l3.populateBook(new String[] {
+        l3.populateBook(new String[]{
                 "Computer Science Vol. 3"
         });
         uwon.newLibrary(l1);
@@ -413,7 +415,7 @@ go
         // Initializing partner library.
         University partner = new University();
         Library l4 = new Library();
-        l4.populateBook(new String[] {
+        l4.populateBook(new String[]{
                 "Bible Of Mice Vol. 3"
         });
         partner.newLibrary(l4);
@@ -439,7 +441,9 @@ go
         test = new ArrayList<String>(Arrays.asList("Computer Science Vol. 3", "Bible Of Mice Vol. 3"));
         assertEquals(test, uwon.findBook("3"));
         // If there are no matching results, an exception will be thrown.
-        assertThrows(Exception.class, ()-> { uwon.findBook("Harry Potter"); } );
+        assertThrows(Exception.class, () -> {
+            uwon.findBook("Harry Potter");
+        });
     }
     // ===================================== End of Aaron =========================================== //
 }

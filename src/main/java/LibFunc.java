@@ -1,4 +1,4 @@
-//Extra library functionality
+/*/Extra library functionality
 private ArrayList<Journal> eJournals;
 private ArrayList<Student> borrowers;
 
@@ -25,3 +25,4 @@ private ArrayList<Student> borrowers;
             return false;
         }
     }
+*/

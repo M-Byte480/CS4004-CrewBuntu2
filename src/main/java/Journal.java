@@ -3,10 +3,16 @@ public class Journal {
     private boolean eJournal;
     private int subscriptionMonths;
 
+
     public Journal(String name, boolean eJournal) {
         this.name = name;
         this.eJournal = eJournal;
         subscriptionMonths = 12;
+    }
+    public Journal(String name , boolean eJournal, int subscriptionMonths){
+        this.name = name;
+        this.eJournal = eJournal;
+        this.subscriptionMonths = subscriptionMonths;
     }
     
     public void journalDelivery(){
@@ -35,5 +41,10 @@ public class Journal {
             phys = "eJournal";
         }
         return "Title:" + getName() + ", " + phys + " with " + getSubscriptionMonths() + " subscription months left";
+    }
+
+
+    public void addJournalToArray(){
+
     }
 }

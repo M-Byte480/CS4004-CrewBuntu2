@@ -90,12 +90,33 @@ public class JacobUnitLibraryTests {
     }
 
     // ===================================== Breny =========================================== //
+    //Complaint 4
+    //Unavailability of journal issues while they are being bound into yearly volumes
+    @Test
+    @DisplayName("Check Person For Admin Permissions")
+    public void sortJournalsIntoVolumes () {
+         int[] subs = new int[12];
+        Journal j = new Journal("J",false, 1);
+        Journal f = new Journal("F", false, 2);
+        Journal m = new Journal("M", false, 3);
+        Journal a = new Journal("A", false, 4);
+        Journal J = new Journal("J", false, 6);
+
+
+
+
+
+
+    }
+
     @Test
     @DisplayName("Check Person For Admin Permissions")
     public void checkPrivelidges () {
         Person andy = new Person("andy" , true);
         Person tom = new Person("Tom", false);
-        assertTrue(andy.isAdmin());
+        University ul = new University();
+        ul.setAdmins(andy);
+        assertTrue(ul.checkAdmins(andy));
     }
 
       //Complaint 5

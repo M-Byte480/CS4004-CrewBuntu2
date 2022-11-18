@@ -19,6 +19,12 @@ public class Library {
     private ArrayList<Shelf> shelves;
 
     private HashMap<String, ArrayList<Student>> borrowInstances = new HashMap<String, ArrayList<Student>>();
+    private int[] subsriptionsInYear = new int[12];
+
+
+    public void sortJournalsBasedOnYear(int[] subsriptionsInYear){
+
+    }
 
     static {
         try {
@@ -179,6 +185,7 @@ public class Library {
     public void addBookTOLibrary(Book s) {
         bookArrayList.add(s);
     }
+
     public ArrayList<Book> getBookArrayList() {
         return bookArrayList;
     }

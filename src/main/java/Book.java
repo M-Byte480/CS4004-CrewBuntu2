@@ -110,7 +110,7 @@ public class Book implements Comparator<Book> {
         this.countriesAvailable = countriesAvailable;
     }
 
-    public ArrayList<String> getBibliography() {
+    public ArrayList<String> getBibliographies() {
         return bibliography;
     }
 
@@ -153,6 +153,10 @@ public class Book implements Comparator<Book> {
     }
 
     public void setShelfWhereStored(Shelf s) {
+    }
+
+    public String getBibliography() {
+        return null;
     }
 }
 

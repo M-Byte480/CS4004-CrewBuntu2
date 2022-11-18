@@ -49,7 +49,8 @@ public class Library {
     public ArrayList<String> searchBooks(String bookName) {
         ArrayList<String> books = new ArrayList<>();
         for (String book : this.books) {
-            if (book.indexOf(bookName.toLowerCase()) != -1) {
+            String bookLowerCase = book.toLowerCase();
+            if (bookLowerCase.contains(bookName.toLowerCase())) {
                 books.add(book);
             }
         }
@@ -261,4 +262,5 @@ public class Library {
         }
         return borrowers;
     }
+
 }

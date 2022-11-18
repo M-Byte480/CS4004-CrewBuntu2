@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
@@ -9,9 +8,9 @@ public class Library {
     private ArrayList<String> books;
     private ArrayList<Book> bookArrayList;
     private ArrayList<Subscription> subscriptions;
-    private ArrayList<String> journalSubs;
+    private ArrayList<Journal> journals;
+    private ArrayList<Journal> eJournals;
     private ArrayList<Student> borrowers;
-    private static final ArrayList<String> bibliography;
     private ArrayList<Reminder> reminders;
     private ArrayList<Loan> loans;
     private static ArrayList<EBookRequest> requestsForEBooks;
@@ -26,6 +25,22 @@ public class Library {
 
     }
 
+
+
+
+    public ArrayList<Journal> geteJournals() {
+        return eJournals;
+    }
+
+    public boolean inOtherLibsJournal(Journal journal, Library l){
+        if(l.getJournals().contains(journal) || l.geteJournals().contains(journal)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private static final ArrayList<String> bibliography;
     static {
         try {
             bibliography = populate();
@@ -38,9 +53,10 @@ public class Library {
         bookArrayList = new ArrayList<>();
         books = new ArrayList<>();
         subscriptions = new ArrayList<Subscription>();
-        journalSubs = new ArrayList<String>();
+        journals = new ArrayList<>();
         borrowers = new ArrayList<Student>();
         shelves = new ArrayList<Shelf>();
+        eJournals = new ArrayList<>();
     }
 
     public void getNewBook(String book) {
@@ -64,8 +80,8 @@ public class Library {
     }
 
 
-    public ArrayList<String> getJournalSubs() {
-        return journalSubs;
+    public ArrayList<Journal> getJournalSubs() {
+        return journals;
     }
 
     public boolean inOtherLibs(String book, Library l) {
@@ -114,8 +130,13 @@ public class Library {
         return false;
     }
 
-    public boolean binarySearch(String name) throws FileNotFoundException {
-        return -1 < Collections.binarySearch(bibliography, name);
+    public boolean binarySearch(String name) {
+        try {
+            return -1 < Collections.binarySearch(bibliography, name);
+        } finally {
+
+        }
+
     }
 
     private static ArrayList<String> populate() throws FileNotFoundException {
@@ -157,8 +178,12 @@ public class Library {
     }
 
 
-    public void subscribe(String journal) {
-        journalSubs.add(journal);
+    public void subscribe(Journal j){
+        if(j.iseJournal()){
+            eJournals.add(j);
+        }else{
+            journals.add(j);
+        }
     }
 
 
@@ -259,4 +284,9 @@ public class Library {
         }
         return borrowers;
     }
+
+    public ArrayList<Journal> getJournals() {
+        return journals;
+    }
+
 }

@@ -1,21 +1,28 @@
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.matches;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.*;
 
-import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 //import org.junit.Assert.*;
 
@@ -46,10 +53,11 @@ public class JacobUnitLibraryTests {
         University ul = new University();
         Library l1 = new Library();
         ul.newLibrary(l1);
-        ul.subscribe(l1, "Christianity Monthly");
+        Journal christianity = new Journal("Christianity Monthly", true);
+        ul.subscribe(l1, christianity);
         Library l2 = new Library();
         ul.newLibrary(l2);
-        assertFalse(ul.subscribe(l2, "Christianity Monthly"));
+        assertFalse(ul.subscribe(l2, christianity));
     }
 
     @Test
@@ -65,7 +73,7 @@ public class JacobUnitLibraryTests {
         uwon.newLibrary(l2);
         assertFalse(uwon.getBookForLib(l2, "Computer Science for Dummies"));
     }
-    
+
     @Test
     @DisplayName("Check for journal duplicates in other Universities")
     public void testOtherUniJournal(){
@@ -74,12 +82,13 @@ public class JacobUnitLibraryTests {
         uwon.joinUni(ul);
         Library l1 = new Library();
         ul.newLibrary(l1);
-        l1.subscribe("Mockito Monthly");
+        Journal mock = new Journal("Mockito Monthly", true);
+        l1.subscribe(mock);
         Library l2 = new Library();
         uwon.newLibrary(l2);
-        assertFalse(uwon.subscribe(l2, "Mockito Monthly"));
+        assertFalse(uwon.subscribe(l2, mock));
     }
-    
+
     @Test
     @DisplayName("Display previous owners")
     public void testShow() {
@@ -118,8 +127,7 @@ public class JacobUnitLibraryTests {
         ul.setAdmins(andy);
         assertTrue(ul.checkAdmins(andy));
     }
-
-      //Complaint 5
+    //Complaint 5
     //Subscription to journals of marginal interest to the university, which could be
     //accessed in other universities with which UWON has an agreement.
     @Test
@@ -155,16 +163,21 @@ public class JacobUnitLibraryTests {
 
         UL.newLibrary(bugLibrary);
         LSAD.newLibrary(artStudentBodyOdour);
+        ArrayList<Book> bugBook = new ArrayList<>();
+        Shelf bugShelf = new Shelf("Bugs", bugBook);
+        Book Worms = new Book();
+        bugShelf.addBookToShelf(Worms);
 
         LSAD.joinUni(UL);
 
-        Book Worms = new Book("Bugs", "Breny");
+
+        Worms = new Book("Bugs", "Breny");
         bugLibrary.addBookTOLibrary(Worms);
 
         boolean temp = LSAD.getBookForLib(Worms);
 
         assertTrue(temp);
-}
+    }
     //Complaint 7
     //Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
     //found at the appropriate place on the shelves.
@@ -201,40 +214,104 @@ public class JacobUnitLibraryTests {
 
 
     // ===================================== Milan =========================================== //
-    // Problem 8:
-    // ●    Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
-    //      found at the appropriate place on the shelves.
-
-    // Approach:
-    // Since the book is not found in the correct place on the shelf, suggests to me that there are
-    // two separate naming and sorting convention hosted.
-    // To simplify this we will standardize it and will do it by ascending alphabetical order.
-    @DisplayName("Problem 8: \n Sorting Algorithm")
-    @Test
-    public void test() {
-        Book[] books = new Book[10];
-//        books.sort();
-
-
-    }
-
     // Problem 9:
     // ●    Bibliographical search restricted to library opening hours. Slow, tedious
     //      bibliographical search due to manipulation of card indexes
     //
-    //
-    @DisplayName("Problem 9: \n Search Speed Test")
+    // Approach:
+    // We are going
+    // two separate naming and sorting convention hosted.
+    // To simplify this we will standardize it and will do it by ascending alphabetical order.
+
+
+    @Mock
+    Book spyAnimal = new Book();
+
+    @DisplayName("9.1.1: Test if Linear finds books")
     @ParameterizedTest
     @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
-    @Timeout(1)
-    public void testSpeedOfTwoSearches(String animal) throws FileNotFoundException {
+    public void isSearchResultFoundByLinearSearch(String animal) {
+        when(spyAnimal.getBibliography()).thenReturn(animal);
+
+        Library uwon = new Library();
+
+        assertTrue(uwon.linearSearch(spyAnimal.getBibliography()));  // Gets first bibliography of the book
+    }
+
+    @DisplayName("9.1.2: Test if Binary finds books")
+    @ParameterizedTest
+    @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
+    public void isSearchFoundByBinarySearch(String animal) {
+        when(spyAnimal.getBibliography()).thenReturn(animal);
+
+        Library uwon = new Library();
+
+        assertTrue(uwon.binarySearch(spyAnimal.getBibliography()));
+    }
+
+    @DisplayName("9.2.1: Test if Linear Fails to find books")
+    @ParameterizedTest
+    @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
+    public void isFailFindLinear(String animal) {
+        when(spyAnimal.getBibliography()).thenReturn(animal);
+
+        Library uwon = new Library();
+
+        assertFalse(uwon.linearSearch(spyAnimal.getBibliography()));
+    }
+
+    @DisplayName("9.2.2: Test if Binary Fails to find books")
+    @ParameterizedTest
+    @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
+    public void isFailFindBinary(String animal) {
+        when(spyAnimal.getBibliography()).thenReturn(animal);
+
+        Library uwon = new Library();
+
+        assertFalse(uwon.binarySearch(spyAnimal.getBibliography()));
+    }
+
+    @DisplayName("9.3.1: Search Speed Test for books found")
+    @ParameterizedTest
+    @ValueSource(strings = {"apple", "bee", "zebra", "donkey", "giraffe", "lion", "orangutan", "monkey", "mongoose", "butterfly"})
+    public void testSpeedOfTwoSearches(String animal) {
         Book animals = new Book();
         animals.addBibliography(animal);
         Library uwon = new Library();
 
         // Speed of Binary
         Instant start = Instant.now();
-        uwon.binarySearch(animals.getBibliography().get(0));
+        uwon.binarySearch(animals.getBibliographies().get(0));
+        Instant end = Instant.now();
+
+        Duration binarySearchTime = Duration.between(start, end);
+
+        // Speed of Linear Search
+        start = Instant.now();
+        uwon.linearSearch(animals.getBibliographies().get(0));
+        end = Instant.now();
+
+        Duration linearSearchTime = Duration.between(start, end);
+
+        /* Here is a neat Trick: you can comment out this block of code by removing //
+        System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
+        System.out.println("Linear search took: " + linearSearchTime.toNanos() + " nanoseconds");
+        //*/
+
+        assertTrue(binarySearchTime.toNanos() <= linearSearchTime.toNanos());
+    }
+
+    @DisplayName("9.3.2: Search Speed Test for books not found")
+    @ParameterizedTest
+    @ValueSource(strings = {"a1f1v", "aw1vbne", "eftg4h", "asfg", "awwwrrr", "wwwewr", "ttetbrhrh", "lokode", "[#]", "3r2"})
+    public void testSpeedOfTwoFailedSearches(String animal) {
+        Book animals = new Book();
+        animals.addBibliography(animal);
+        Library uwon = new Library();
+
+        // Speed of Binary
+        Instant start = Instant.now();
+        uwon.binarySearch(animals.getBibliographies().get(0));
         Instant end = Instant.now();
 
         // Print speed of Binary and calculate it
@@ -242,20 +319,111 @@ public class JacobUnitLibraryTests {
 
         // Speed of Linear Search
         start = Instant.now();
-        uwon.linearSearch(animals.getBibliography().get(0));
+        uwon.linearSearch(animals.getBibliographies().get(0));
         end = Instant.now();
 
         // Print speed of
         Duration linearSearchTime = Duration.between(start, end);
 
 
-        ///* Here is a neat Trick: you can comment out this block of code by removing //
+        /* Here is a neat Trick: you can comment out this block of code by removing //
         System.out.println("Binary search took: " + binarySearchTime.toNanos() + " nanoseconds");
         System.out.println("Linear search took: " + linearSearchTime.toNanos() + " nanoseconds");
         //*/
 
         assertTrue(binarySearchTime.toNanos() <= linearSearchTime.toNanos());
     }
+
+
+    // Problem 10:
+    // ●    Inaccurate search results, due to poor classification of books, journals or
+    //      proceedings within departments.
+    //
+    // Approach:
+    //      So this sounds like there is a mix of books and journals in a set of collection.
+    //      A possible solution is to split up the collection into two groups: Books and Journals.
+    //      When you are searching, you will have to select which type you want and it will automatically look at that data set.
+
+    @DisplayName("10.0.0: Splitting books into two sets")
+    @ParameterizedTest
+    @CsvSource(value = {
+            "book,The Milk:Boris",
+            "book,Oregon:Hans",
+            "journal,What is popping:Kevin",
+            "journal,Hello World! Every Programmers favourite program:Milan Kovacs",
+            "book,Maker of all:Adam",
+            "journal,Brny's Wrld! Top 50:Breny",
+            "book,The meaning of life:Italo",
+            "journal,Ich Liebe Dich:Perto"
+    })
+    public void splitTheBooks(String input, String output) {
+        String[] data = output.split(":");
+
+        String title = data[0];
+        String author = data[1];
+
+        Object textBook = null;
+        if (input.equals("book")) {
+            textBook = new Book(title, author);
+        } else if (input.equals("journal")) {
+            textBook = new Journal(title, author);
+        }
+
+        String type = null;
+        if (textBook instanceof Book) {
+            type = "Book";
+        } else if (textBook instanceof Journal) {
+            type = "Journal";
+        }
+
+        assertEquals(type.toLowerCase(), input.toLowerCase());
+    }
+
+    @DisplayName("Valid Emails")
+    @ParameterizedTest
+    @ValueSource(strings = {"bepis@uwon.com", "milan@lib.ie", "josh@josh.josh", "k@gp.tv"})
+    public void validEmail(String e){
+
+        Email email = new Email(e);
+        assertNotEquals(null, email.getEmail());
+
+        assertAll(
+                () -> assertAll("Main",
+                        () -> assertTrue(email.containsSingleStrudel()),
+//                        () -> assertTrue(email.containsNoSpace()),
+                        () -> assertTrue(email.startsWithLetter()),
+                        () -> assertTrue(email.endsWithLetter())
+//                        () -> assertTrue(email.containsAllowedCharacters())
+                ),
+
+                () -> {
+                    assertEquals(2, email.emailParts().length);
+
+                    assertAll("Name",
+                            () -> assertTrue(email.nameContainsAlphanumericCharacters())
+                            );
+
+                    assertAll("Domain",
+                            () -> assertTrue(email.domainContainAlphabeticalCharacters()),
+                            () -> assertTrue(email.domainContainsSingleDot())
+                            );
+                    }
+                );
+    }
+
+
+    @ParameterizedTest
+    @DisplayName("Invalid Emails")
+    @ValueSource(strings = {"hello@gmail.com"})
+    public void invalidEmails(String email){
+        String[] emailSplit = email.split("@");
+
+        assertAll(
+                () -> assertNotEquals(2, emailSplit.length),
+                () -> assertNotEquals(2, 3)
+        );
+    }
+
     // ===================================== End of Milan =========================================== //
 
     /*
@@ -316,6 +484,7 @@ go
      libraries, so we will also check those in our search.
 
      */
+
 
     @Test
     @DisplayName("Test for comprehensive search results.")

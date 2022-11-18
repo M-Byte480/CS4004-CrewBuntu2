@@ -27,12 +27,6 @@ public class Student {
         return dueDate;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDueDate(int daysUntilDue) { dueDate = borrowDate + ((long) daysUntilDue * 24 * 60 * 60 * 1000); }
-
     public void increaseBorrowTime(int days) {
         borrowDate += ((long) days * 24 * 60 * 60 * 1000 + 1);
     }

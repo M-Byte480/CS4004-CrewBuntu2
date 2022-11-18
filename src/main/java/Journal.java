@@ -5,8 +5,6 @@ public class Journal {
     private boolean eJournal;
     private int subscriptionMonths;
 
-    public Journal(){}
-
     public Journal(String name, boolean eJournal) {
         this.name = name;
         this.eJournal = eJournal;
@@ -18,21 +16,6 @@ public class Journal {
         this.author = author;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
 
     public void journalDelivery() {
         subscriptionMonths--;

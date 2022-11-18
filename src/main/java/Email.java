@@ -17,14 +17,6 @@ public class Email {
         return email;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
     public String[] emailParts() {
         String[] emailParts = email.split("@");
         return emailParts;
@@ -34,9 +26,6 @@ public class Email {
         return Pattern.matches("^[^@]*@[^@]*$", email);
     }
 
-    public boolean containsNoSpace() {
-        return Pattern.matches("^[^\\s]*\\S[^\\s]*$", email);
-    }
 
     public boolean startsWithLetter() {
         return Pattern.matches("^[a-z].*$", email);
@@ -44,10 +33,6 @@ public class Email {
 
     public boolean endsWithLetter() {
         return Pattern.matches("^.*[a-z]$", email);
-    }
-
-    public boolean containsAllowedCharacters() {
-        return Pattern.matches("^[a-z0-9@\\.]*$", email);
     }
 
     public boolean nameContainsAlphanumericCharacters(){
@@ -61,7 +46,4 @@ public class Email {
     public boolean domainContainsSingleDot(){
        return Pattern.matches("^[^\\.]*\\.[^\\.]*$", domain);
     }
-
-
-
 }

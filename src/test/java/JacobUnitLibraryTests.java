@@ -435,7 +435,7 @@ public class JacobUnitLibraryTests {
     @ValueSource(strings = {"hello@milan@this.com", "thisismyemail.com"})
     public void failInStrudel(String e){
         Email email = new Email(e);
-        assertFalse(email.containsSingleStrudel());
+        assertTrue(email.containsSingleStrudel());
     }
 
     @DisplayName("Faulty Starting Names")

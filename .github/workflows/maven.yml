@@ -6,10 +6,12 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: CI CD of CrewBuntu Testing
+name: CrewBuntu CICD
 
 on:
   push:
+    branches: [ "main" ]
+  pull_request:
     branches: [ "main" ]
 
 jobs:

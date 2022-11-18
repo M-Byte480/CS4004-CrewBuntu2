@@ -35,6 +35,7 @@ public class JacobUnitLibraryTests {
     public JacobUnitLibraryTests() {
     }
 
+    // ==================================== Jacob's Test ==================================== //
     @Test
     @DisplayName("Check for duplicates")
     public void testDupes() {
@@ -60,34 +61,6 @@ public class JacobUnitLibraryTests {
         assertFalse(ul.subscribe(l2, christianity));
     }
 
-    @Test
-    @DisplayName("Check if a book's in another University")
-    public void testOtherUni() {
-        University ul = new University();
-        University uwon = new University();
-        uwon.joinUni(ul);
-        Library l1 = new Library();
-        ul.newLibrary(l1);
-        l1.getNewBook("Computer Science for Dummies");
-        Library l2 = new Library();
-        uwon.newLibrary(l2);
-        assertFalse(uwon.getBookForLib(l2, "Computer Science for Dummies"));
-    }
-
-    @Test
-    @DisplayName("Check for journal duplicates in other Universities")
-    public void testOtherUniJournal(){
-        University ul = new University();
-        University uwon = new University();
-        uwon.joinUni(ul);
-        Library l1 = new Library();
-        ul.newLibrary(l1);
-        Journal mock = new Journal("Mockito Monthly", true);
-        l1.subscribe(mock);
-        Library l2 = new Library();
-        uwon.newLibrary(l2);
-        assertFalse(uwon.subscribe(l2, mock));
-    }
 
     @Test
     @DisplayName("Display previous owners")
@@ -97,6 +70,73 @@ public class JacobUnitLibraryTests {
         l1.borrow("The Bible", "Jacob Beck", 15);
         assertNotEquals("", l1.getBorrowers("The Bible"));
     }
+
+    @Test
+    @DisplayName("Check the subscription method")
+    public void subscribe(){
+        Journal j = new Journal("Wonderland News", false);
+        Library l = new Library();
+        l.subscribe(j);
+        assertTrue(l.getJournals().contains(j));
+    }
+
+    @Test
+    @DisplayName("Check the e-journal subscription method")
+    public void eSubscribe(){
+        Journal j = new Journal("Wonderland News Online", true);
+        Library l = new Library();
+        l.subscribe(j);
+        assertFalse(l.getJournals().contains(j));
+        assertTrue(l.geteJournals().contains(j));
+    }
+
+    @Test
+    @DisplayName("Journal Simple Method testing")
+    public void varietyTests(){
+        Journal j = new Journal("Mockito 101", false);
+        assertFalse(j.iseJournal());
+        j.journalDelivery();
+        assertEquals(11, j.getSubscriptionMonths());
+        j.renew(6);
+        assertEquals(17, j.getSubscriptionMonths());
+    }
+
+    @Test
+    @DisplayName("Avoid multi-subscribing")
+    public void otherLib(){
+        Library l1 = new Library();
+        Library l2 = new Library();
+        University uwon = new University();
+        uwon.newLibrary(l1);
+        uwon.newLibrary(l2);
+        Journal j = new Journal("Mockito Monthly ONLINE", true);
+        uwon.subscribe(l2, j);
+        assertFalse(uwon.subscribe(l1, j));
+    }
+
+    @Test
+    @DisplayName("Trying to subscribe with the same journal in another library")
+    public void otherUni(){
+        Library l1 = new Library();
+        Library l2 = new Library();
+        University uwon = new University();
+        University ul = new University();
+        uwon.newLibrary(l1);
+        ul.newLibrary(l2);
+        ul.joinUni(uwon);
+        Journal j = new Journal("Mockito Monthly OFFLINE", false);
+        ul.subscribe(l2, j);
+        assertFalse(uwon.subscribe(l1, j));
+    }
+
+    @Test
+    @DisplayName("Getting journal info")
+    public void testToString(){
+        Journal j = new Journal("The World's Best Test Suites of the Month", false);
+        assertTrue(j.toString().equals("Title:The World's Best Test Suites of the Month, Physical Journal with 12 subscription months left"));
+    }
+
+    // ================================ End of Jacob ========================================= //
 
     // ===================================== Breny =========================================== //
     @Test
@@ -341,6 +381,7 @@ public class JacobUnitLibraryTests {
         String title = data[0];
         String author = data[1];
 
+        // Treat this as someone passing objects into our test
         Object textBook = null;
         if (input.equals("book")) {
             textBook = new Book(title, author);
@@ -348,6 +389,7 @@ public class JacobUnitLibraryTests {
             textBook = new Journal(title, author);
         }
 
+        // The actual test
         String type = null;
         if (textBook instanceof Book) {
             type = "Book";
@@ -368,15 +410,12 @@ public class JacobUnitLibraryTests {
 
         assertAll(
                 () -> assertAll("Main",
-                        () -> assertTrue(email.containsSingleStrudel()),
-//                        () -> assertTrue(email.containsNoSpace()),
                         () -> assertTrue(email.startsWithLetter()),
                         () -> assertTrue(email.endsWithLetter())
-//                        () -> assertTrue(email.containsAllowedCharacters())
                 ),
 
                 () -> {
-                    assertEquals(2, email.emailParts().length);
+                    assertTrue(email.containsSingleStrudel());
 
                     assertAll("Name",
                             () -> assertTrue(email.nameContainsAlphanumericCharacters())
@@ -391,16 +430,52 @@ public class JacobUnitLibraryTests {
     }
 
 
+    @DisplayName("Testing multiple Strudel")
     @ParameterizedTest
-    @DisplayName("Invalid Emails")
-    @ValueSource(strings = {"hello@gmail.com"})
-    public void invalidEmails(String email){
-        String[] emailSplit = email.split("@");
+    @ValueSource(strings = {"hello@milan@this.com", "thisismyemail.com"})
+    public void failInStrudel(String e){
+        Email email = new Email(e);
+        assertFalse(email.containsSingleStrudel());
+    }
 
-        assertAll(
-                () -> assertNotEquals(2, emailSplit.length),
-                () -> assertNotEquals(2, 3)
-        );
+    @DisplayName("Faulty Starting Names")
+    @ParameterizedTest
+    @ValueSource(strings = {"3ilan@this.com", "231MeotireNews@metori.com"})
+    public void faultyStartingName(String e){
+        Email email = new Email(e);
+        assertFalse(email.startsWithLetter());
+    }
+
+    @DisplayName("Faulty Ending Names")
+    @ParameterizedTest
+    @ValueSource(strings = {"Milan@somewhere.23", "Milan@sorry.i3"})
+    public void faultyEndingNames(String e){
+        Email email = new Email(e);
+        assertFalse(email.endsWithLetter());
+    }
+
+    @DisplayName("Name containing incorrect characters")
+    @ParameterizedTest
+    @ValueSource(strings = {"hello$@world.py", "java%iscool.com@ ", "py charm@jupiter.com", "dr.racket@ireland.com"})
+    public void incorrectCharacters(String e){
+        Email email = new Email(e);
+        assertFalse(email.nameContainsAlphanumericCharacters());
+    }
+
+    @DisplayName("Domain containing incorrect characters")
+    @ParameterizedTest
+    @ValueSource(strings = {"@world.p2y", "@java%iscool.com", "@py charmjupiter.com", "@dr.racketireland com"})
+    public void incorrectCharaterInDomain(String e){
+        Email email = new Email(e);
+        assertFalse(email.domainContainAlphabeticalCharacters());
+    }
+
+    @DisplayName("Domain not containing single dot")
+    @ParameterizedTest
+    @ValueSource(strings = {"@world.p2.y", "@java.%iscool.com", "@py charmjupitecom", "@.."})
+    public void multipleOrNoDots(String e){
+        Email email = new Email(e);
+        assertFalse(email.domainContainsSingleDot());
     }
 
     // ===================================== End of Milan =========================================== //

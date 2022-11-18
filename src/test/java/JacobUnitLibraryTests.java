@@ -118,6 +118,23 @@ public class JacobUnitLibraryTests {
 
     }
 
+    //Complaint 4
+    //Unavailability of journal issues while they are being bound into yearly volumes
+    @Test
+    @DisplayName("Check Person For Admin Permissions")
+    public void sortJournalsIntoVolumes() {
+        int[] subs = new int[12];
+        Journal j = new Journal("J", false, 1);
+        Journal f = new Journal("F", false, 2);
+        Journal m = new Journal("M", false, 3);
+        Journal a = new Journal("A", false, 4);
+        Journal J = new Journal("J", false, 6);
+
+
+    }
+    //---------------------------------------Breny----------------------------------------
+    //Admin Checker Complaint
+    //Check wheter a member of a university has admin permissions
     @Test
     @DisplayName("Check Person For Admin Permissions")
     public void checkPrivelidges () {

@@ -1,13 +1,13 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
-   /*
-public class SubscriptionTest {
 
+public class SubscriptionTest {
+    
     public SubscriptionTest() {
     }
     
- @Test
+    @Test
     @DisplayName("Check the subscription method")
     public void subscribe(){
         Journal j = new Journal("Wonderland News", false);
@@ -25,7 +25,6 @@ public class SubscriptionTest {
         assertFalse(l.getJournals().contains(j));
         assertTrue(l.geteJournals().contains(j));
     }
-
     
     @Test
     @DisplayName("Journal Simple Method testing")
@@ -73,5 +72,3 @@ public class SubscriptionTest {
         assertTrue(j.toString().equals("Title:The World's Best Test Suites of the Month, Physical Journal with 12 subscription months left"));
     }
 }
-
-    */

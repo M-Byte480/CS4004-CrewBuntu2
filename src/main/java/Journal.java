@@ -2,8 +2,9 @@ public class Journal {
     private String title;
     private String author;
     private String name;
-    private boolean eJournal;
+    private boolean eJournal = false;
     private int subscriptionMonths;
+    private boolean isBeingBound = false;
 
     public Journal(String name, boolean eJournal) {
         this.name = name;
@@ -35,6 +36,18 @@ public class Journal {
 
     public int getSubscriptionMonths() {
         return subscriptionMonths;
+    }
+
+    public void beingBound(){
+        this.isBeingBound = true;
+        if (!eJournal) {
+            this.requestEBookVersion();
+        }
+    }
+
+    public void requestEBookVersion(){
+        EBookRequest request = new EBookRequest(this);
+        Library.getRequestsForEBooks().add(request);
     }
 
     public String toString() {

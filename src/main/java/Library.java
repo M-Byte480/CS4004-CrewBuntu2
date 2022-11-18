@@ -13,7 +13,7 @@ public class Library {
     private ArrayList<Student> borrowers;
     private ArrayList<Reminder> reminders;
     private ArrayList<Loan> loans;
-    private static ArrayList<EBookRequest> requestsForEBooks;
+    private static ArrayList<EBookRequest> requestsForEBooks = new ArrayList<>();
 
     private ArrayList<Shelf> shelves;
 
@@ -66,7 +66,8 @@ public class Library {
     public ArrayList<String> searchBooks(String bookName) {
         ArrayList<String> books = new ArrayList<String>();
         for (String book : this.books) {
-            if (book.toLowerCase().indexOf(bookName.toLowerCase()) != -1) {
+            String bookLowerCase = book.toLowerCase();
+            if (bookLowerCase.contains(bookName.toLowerCase())) {
                 books.add(book);
             }
         }

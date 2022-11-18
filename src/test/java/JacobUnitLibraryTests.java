@@ -539,7 +539,6 @@ go
 
      */
 
-
     @Test
     @DisplayName("Test for comprehensive search results.")
     public void testForComprehensiveSearchResults() throws Exception {
@@ -548,16 +547,16 @@ go
         Library l1 = new Library();
         Library l2 = new Library();
         Library l3 = new Library();
-        l1.populateBook(new String[]{
+        l1.populateBook(new String[] {
                 "The Bible",
                 "Of Mice And Men",
                 "Winnie The Pooh"
         });
-        l2.populateBook(new String[]{
+        l2.populateBook(new String[] {
                 "The Bible",
                 "Alice in Wonderland",
         });
-        l3.populateBook(new String[]{
+        l3.populateBook(new String[] {
                 "Computer Science Vol. 3"
         });
         uwon.newLibrary(l1);
@@ -566,7 +565,7 @@ go
         // Initializing partner library.
         University partner = new University();
         Library l4 = new Library();
-        l4.populateBook(new String[]{
+        l4.populateBook(new String[] {
                 "Bible Of Mice Vol. 3"
         });
         partner.newLibrary(l4);
@@ -579,22 +578,69 @@ go
         searched.
         */
 
-        // If "The Bible" is searched we can expect to find "The Bible".
         ArrayList<String> test = new ArrayList<String>(List.of("The Bible"));
-        assertEquals(test, uwon.findBook("The Bible"));
-        // If "Alice In" is searched we can expect to find "Alice in Wonderland".
-        test = new ArrayList<String>(Arrays.asList("Alice in Wonderland"));
-        assertEquals(test, uwon.findBook("Alice In"));
-        // If "bibl" is searched we can expect to find "The Bible" and "Bible Of Mice Vol. 3".
-        test = new ArrayList<String>(Arrays.asList("The Bible", "Bible Of Mice Vol. 3"));
-        assertEquals(test, uwon.findBook("bibl"));
-        // If "3" is searched we can expect to find "Computer Science Vol. 3" and "Bible Of Mice Vol. 3".
-        test = new ArrayList<String>(Arrays.asList("Computer Science Vol. 3", "Bible Of Mice Vol. 3"));
-        assertEquals(test, uwon.findBook("3"));
-        // If there are no matching results, an exception will be thrown.
-        assertThrows(Exception.class, () -> {
-            uwon.findBook("Harry Potter");
+        ArrayList<String> test2 = new ArrayList<String>(List.of("Alice in Wonderland"));
+        ArrayList<String> test3 = new ArrayList<String>(List.of("The Bible", "Bible Of Mice Vol. 3"));
+        ArrayList<String> test4 = new ArrayList<String>(List.of("Computer Science Vol. 3", "Bible Of Mice Vol. 3"));
+        assertAll( ()-> {
+            // If "The Bible" is searched we can expect to find "The Bible".
+            assertEquals(test, uwon.findBook("The Bible"));
+            // If "Alice In" is searched we can expect to find "Alice in Wonderland".
+            assertEquals(test2, uwon.findBook("Alice In"));
+            // If "bibl" is searched we can expect to find "The Bible" and "Bible Of Mice Vol. 3".
+            assertEquals(test3, uwon.findBook("bibl"));
+            // If "3" is searched we can expect to find "Computer Science Vol. 3" and "Bible Of Mice Vol. 3".
+            assertEquals(test4, uwon.findBook("3"));
+            // If there are no matching results, an exception will be thrown.
+            assertThrows(Exception.class, ()-> uwon.findBook("Harry Potter"));
         });
     }
+
+    /*
+    We want to be able to support user registration, so we will create a user
+    class that takes in inputs of a username, a password and an email.
+    For the username we will limit it to 8-20 characters.
+    For the password we will require 8 character minimum and at least one
+    lowercase character, one uppercase character and one digit.
+    For the email we will simply ensure that there is a "@" character somewhere after
+    the first character and before the last character.
+     */
+
+    @Test
+    @DisplayName("Test user registration.")
+    public void testUserRegistration() {
+        assertAll( ()-> {
+            // Username validation.
+            // Contains between 8 and 20 characters, should return true.
+            assertTrue(User.checkValidUsername("aB1@=/?.,!¬#"));
+            // Contains less than 8 characters, should return false.
+            assertFalse(User.checkValidUsername("aB1@=/?"));
+            // Contains more than 20 characters, should return false.
+            assertFalse(User.checkValidUsername("aB1@=/?,!¬#aB1@=/?,!¬#"));
+
+            // Password Validation
+            // Contains at least 8 characters, one lowercase, one uppercase and one digit, should return true.
+            assertTrue(User.checkValidPassword("aBcD123@"));
+            // Contains less than 8 characters, one lowercase, one uppercase and one digit, should return false.
+            assertFalse(User.checkValidPassword("aBcD1@"));
+            // Contains at least 8 characters, one lowercase, one uppercase and zero digits, should return false.
+            assertFalse(User.checkValidPassword("aBcDeF@#"));
+            // Contains at least 8 characters, one lowercase, zero uppercase's and one digit, should return false.
+            assertFalse(User.checkValidPassword("abcd12@#"));
+            // Contains at least 8 characters, zero lowercase's, one uppercase and one digit, should return false.
+            assertFalse(User.checkValidPassword("ABCD12@#"));
+
+            // Email Validation
+            // Contains a '@' character between the first and last character, should return true.
+            assertTrue(User.checkValidEmail("jimmyjohn@ul.ie"));
+            // Contains a '@' character as the last character, should return false.
+            assertFalse(User.checkValidEmail("jimmyjohnul.ie@"));
+            // Contains a '@' character as the first character, should return false.
+            assertFalse(User.checkValidEmail("@jimmyjohnul.ie"));
+            // Contains no '@' character, should return false.
+            assertFalse(User.checkValidEmail("jimmyjohnul.ie"));
+        });
+    }
+
     // ===================================== End of Aaron =========================================== //
 }

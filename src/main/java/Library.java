@@ -13,7 +13,7 @@ public class Library {
     private ArrayList<Student> borrowers;
     private ArrayList<Reminder> reminders;
     private ArrayList<Loan> loans;
-    private static ArrayList<EBookRequest> requestsForEBooks;
+    private static ArrayList<EBookRequest> requestsForEBooks = new ArrayList<>();
 
     private ArrayList<Shelf> shelves;
 

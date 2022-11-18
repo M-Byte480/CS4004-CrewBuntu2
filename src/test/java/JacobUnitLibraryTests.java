@@ -13,6 +13,7 @@ import java.util.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 //import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -81,10 +82,11 @@ public class JacobUnitLibraryTests {
         uwon.joinUni(ul);
         Library l1 = new Library();
         ul.newLibrary(l1);
-        l1.subscribe("Mockito Monthly");
+        Journal mock = new Journal("Mockito Monthly", true);
+        l1.subscribe(mock);
         Library l2 = new Library();
         uwon.newLibrary(l2);
-        assertFalse(uwon.subscribe(l2, "Mockito Monthly"));
+        assertFalse(uwon.subscribe(l2, mock));
     }
 
     @Test
@@ -147,14 +149,14 @@ public class JacobUnitLibraryTests {
 
         LSAD.joinUni(UL);
 
-    }
-        Book Worms = new Book("Bugs", "Breny");
+
+        Worms = new Book("Bugs", "Breny");
         bugLibrary.addBookTOLibrary(Worms);
 
         boolean temp = LSAD.getBookForLib(Worms);
 
         assertTrue(temp);
-}
+    }
     //Complaint 7
     //Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
     //found at the appropriate place on the shelves.
@@ -354,6 +356,51 @@ public class JacobUnitLibraryTests {
         }
 
         assertEquals(type.toLowerCase(), input.toLowerCase());
+    }
+
+    @DisplayName("Valid Emails")
+    @ParameterizedTest
+    @ValueSource(strings = {"bepis@uwon.com", "milan@lib.ie", "josh@josh.josh", "k@gp.tv"})
+    public void validEmail(String e){
+
+        Email email = new Email(e);
+        assertNotEquals(null, email.getEmail());
+
+        assertAll(
+                () -> assertAll("Main",
+                        () -> assertTrue(email.containsSingleStrudel()),
+//                        () -> assertTrue(email.containsNoSpace()),
+                        () -> assertTrue(email.startsWithLetter()),
+                        () -> assertTrue(email.endsWithLetter())
+//                        () -> assertTrue(email.containsAllowedCharacters())
+                ),
+
+                () -> {
+                    assertEquals(2, email.emailParts().length);
+
+                    assertAll("Name",
+                            () -> assertTrue(email.nameContainsAlphanumericCharacters())
+                            );
+
+                    assertAll("Domain",
+                            () -> assertTrue(email.domainContainAlphabeticalCharacters()),
+                            () -> assertTrue(email.domainContainsSingleDot())
+                            );
+                    }
+                );
+    }
+
+
+    @ParameterizedTest
+    @DisplayName("Invalid Emails")
+    @ValueSource(strings = {"hello@gmail.com"})
+    public void invalidEmails(String email){
+        String[] emailSplit = email.split("@");
+
+        assertAll(
+                () -> assertNotEquals(2, emailSplit.length),
+                () -> assertNotEquals(2, 3)
+        );
     }
 
     // ===================================== End of Milan =========================================== //

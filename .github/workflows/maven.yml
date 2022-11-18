@@ -1,4 +1,8 @@
-image: maven:latest
+name: CI CD of CrewBuntu Testing
+
+on:
+  push:
+    branches: [ "main" ]
 
 stages:
   - build

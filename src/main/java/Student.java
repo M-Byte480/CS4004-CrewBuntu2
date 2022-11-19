@@ -11,6 +11,10 @@ public class Student {
         dueDate = borrowDate + ((long) daysUntilDue * 24 * 60 * 60 * 1000);
     }
 
+    public Student(String name){
+        this.name = name;
+    }
+
     public String getBorrowedBook() {
         return borrowedBook;
     }

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import java.time.Duration;
@@ -662,6 +663,19 @@ go
         int sizeAfter = Library.getRequestsForEBooks().size();
         assertTrue(sizeBefore == sizeAfter);
 
+    }
+
+    @Test
+
+    public void testForLastStudentToBorrow(){
+        Book book = new Book("Book", "Author");
+        Student student = new Student("Student1");
+        Student student2 = new Student("Student2");
+
+        Loan loan1 = new Loan(student, book, LocalDate.now().minusDays(1));
+        Loan loan2 = new Loan(student2, book, LocalDate.now());
+
+        assertTrue(book.lastStudentBeforeDamage() == student2);
     }
     // =============================================== End of Eamonn ===================================== //
 }

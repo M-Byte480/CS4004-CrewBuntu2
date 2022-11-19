@@ -11,9 +11,9 @@ public class Book implements Comparator<Book> {
     private String countriesAvailable;
     private ArrayList<String> bibliography;
     private boolean isAvailable;
-    private ArrayList<Student> loanees;
+    private ArrayList<Student> loanees = new ArrayList<Student>();
     private boolean isBeingBound = false;
-    private boolean isDamaged;
+    private boolean isDamaged = false;
 
     public Book(String name, String author) {
         this.name = name;

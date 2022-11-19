@@ -1,0 +1,268 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > University</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: University (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">University</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (12/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73.5%
+  </span>
+  <span class="absValue">
+    (25/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.2%
+  </span>
+  <span class="absValue">
+    (60/68)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.lang.reflect.Array;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Set;
+&nbsp;
+&nbsp;public class University {
+&nbsp;    private ArrayList&lt;Library&gt; libraries;
+&nbsp;    private ArrayList&lt;University&gt; partners;
+&nbsp;
+&nbsp;    private ArrayList&lt;Person&gt; admins;
+&nbsp;
+<b class="fc">&nbsp;    public University() {</b>
+<b class="fc">&nbsp;        admins = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        libraries = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        partners = new ArrayList&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setAdmins(Person p) {
+<b class="nc">&nbsp;        if (p.isAdmin() == true) {</b>
+<b class="nc">&nbsp;            admins.add(p);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean checkAdmins(Person p) {
+<b class="nc">&nbsp;        if (admins.contains(p)) {</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //adding a new library to partners
+&nbsp;    public void newLibrary(Library l) {
+<b class="fc">&nbsp;        libraries.add(l);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void newPartner(University u) {
+<b class="fc">&nbsp;        partners.add(u);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;University&gt; getPartners() {
+<b class="fc">&nbsp;        return partners;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Library&gt; getLibraries() {
+<b class="fc">&nbsp;        return libraries;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;String&gt; findBook(String bookName) throws Exception {
+<b class="fc">&nbsp;        ArrayList&lt;String&gt; books = new ArrayList&lt;String&gt;();</b>
+<b class="fc">&nbsp;        ArrayList&lt;Library&gt; tempLibraries = new ArrayList&lt;Library&gt;();</b>
+<b class="fc">&nbsp;        ArrayList&lt;University&gt; tempPartners = getPartners();</b>
+<b class="fc">&nbsp;        tempLibraries.addAll(libraries);</b>
+<b class="fc">&nbsp;        for (University u : tempPartners) {</b>
+<b class="fc">&nbsp;            tempLibraries.addAll(u.getLibraries());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        for (Library l : tempLibraries) {</b>
+<b class="fc">&nbsp;            books.addAll(l.searchBooks(bookName));</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        if (books.size() == 0) {</b>
+<b class="fc">&nbsp;            throw new Exception(&quot;There are no matching search results.&quot;);</b>
+&nbsp;        }
+&nbsp;        // Change books to a set and back to remove duplicate entries.
+<b class="fc">&nbsp;        Set&lt;String&gt; set = new HashSet&lt;String&gt;(books);</b>
+<b class="fc">&nbsp;        ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;(set);</b>
+<b class="fc">&nbsp;        return list;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    //go through every library
+&nbsp;    //if library contains book don&#39;t add it
+&nbsp;    //if it doesn&#39;t add it to specified library
+&nbsp;    public boolean getBookForLib(Library l, String book) {
+<b class="fc">&nbsp;        boolean addIt = true;</b>
+<b class="pc">&nbsp;        for (int i = 0; i &lt; libraries.size(); i++) {</b>
+<b class="pc">&nbsp;            if (l.inOtherLibs(book, libraries.get(i))) {</b>
+<b class="fc">&nbsp;                addIt = false;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="pc">&nbsp;        if (addIt == true) {</b>
+<b class="nc">&nbsp;            l.getNewBook(book);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return addIt;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //go through every library
+&nbsp;    //if library contains subscription don&#39;t add it
+&nbsp;    //if it doesn&#39;t add it to specified library
+&nbsp;    public boolean subscribe(Library l, Journal journal) {
+<b class="fc">&nbsp;        boolean addIt = true;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; libraries.size(); i++) {</b>
+<b class="fc">&nbsp;            if (l.inOtherLibsJournal(journal, libraries.get(i))) {</b>
+<b class="fc">&nbsp;                addIt = false;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        if (addIt) {</b>
+<b class="fc">&nbsp;            l.subscribe(journal);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return addIt;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // test run
+&nbsp;    //adding all university libraries
+&nbsp;    //add all librarys to university
+&nbsp;    //add university to partners
+&nbsp;    //add this university to partners
+&nbsp;    public void joinUni(University u) {
+<b class="fc">&nbsp;        libraries.addAll(u.getLibraries());</b>
+<b class="fc">&nbsp;        u.getLibraries().addAll(libraries);</b>
+<b class="fc">&nbsp;        partners.add(u);</b>
+<b class="fc">&nbsp;        u.getPartners().add(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //----------------------SUBSCRIPTIONS-----------------------------------------
+&nbsp;    public boolean getSubscriptionForLib(Subscription s) {
+<b class="fc">&nbsp;        boolean bookAvailable = false;</b>
+<b class="fc">&nbsp;        for (Library library : libraries) {</b>
+<b class="fc">&nbsp;            if (library.inOtherLibsSubscription(s, library) == true) {</b>
+<b class="fc">&nbsp;                bookAvailable = true;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return bookAvailable;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //-----------------------------------------------------Book----------------------------------------
+&nbsp;    public boolean getBookForLib(Book s) {
+<b class="fc">&nbsp;        boolean bookAvailable = false;</b>
+<b class="pc">&nbsp;        for (Library library : libraries) {</b>
+<b class="fc">&nbsp;            if (library.inOtherLibsShelf(s, library) == true) {</b>
+<b class="fc">&nbsp;                bookAvailable = true;</b>
+<b class="fc">&nbsp;                return bookAvailable;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return bookAvailable;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    //-----------------------------------------------------SHELVES----------------------------------------
+&nbsp;    public boolean checkUniversityForBook(Book book) {
+<b class="fc">&nbsp;        boolean bookAvailable = true;</b>
+<b class="fc">&nbsp;        for (Library l : libraries) {</b>
+<b class="pc">&nbsp;            if (l.checkShelfForBook(book)) {</b>
+<b class="fc">&nbsp;                bookAvailable = true;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                bookAvailable = false;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return bookAvailable;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-18 23:12</div>
+</div>
+</body>
+</html>

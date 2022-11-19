@@ -1,0 +1,401 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Library</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Library (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Library</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80.6%
+  </span>
+  <span class="absValue">
+    (29/36)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77.8%
+  </span>
+  <span class="absValue">
+    (42/54)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.4%
+  </span>
+  <span class="absValue">
+    (95/110)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.io.File;
+&nbsp;import java.io.FileNotFoundException;
+&nbsp;import java.time.Duration;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;public class Library {
+&nbsp;    private ArrayList&lt;String&gt; books;
+&nbsp;    private ArrayList&lt;Book&gt; bookArrayList;
+&nbsp;    private ArrayList&lt;Subscription&gt; subscriptions;
+&nbsp;    private ArrayList&lt;Journal&gt; journals;
+&nbsp;    private ArrayList&lt;Journal&gt; eJournals;
+&nbsp;    private ArrayList&lt;Student&gt; borrowers;
+&nbsp;    private ArrayList&lt;Reminder&gt; reminders;
+&nbsp;    private ArrayList&lt;Loan&gt; loans;
+<b class="fc">&nbsp;    private static ArrayList&lt;EBookRequest&gt; requestsForEBooks = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    private ArrayList&lt;Shelf&gt; shelves;
+&nbsp;
+<b class="fc">&nbsp;    private HashMap&lt;String, ArrayList&lt;Student&gt;&gt; borrowInstances = new HashMap&lt;String, ArrayList&lt;Student&gt;&gt;();</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public ArrayList&lt;Journal&gt; geteJournals() {
+<b class="fc">&nbsp;        return eJournals;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean inOtherLibsJournal(Journal journal, Library l){
+<b class="fc">&nbsp;        if(l.getJournals().contains(journal) || l.geteJournals().contains(journal)){</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        }else{
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private static final ArrayList&lt;String&gt; bibliography;
+&nbsp;    static {
+&nbsp;        try {
+<b class="fc">&nbsp;            bibliography = populate();</b>
+<b class="nc">&nbsp;        } catch (FileNotFoundException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public Library() {</b>
+<b class="fc">&nbsp;        bookArrayList = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        books = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        subscriptions = new ArrayList&lt;Subscription&gt;();</b>
+<b class="fc">&nbsp;        journals = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        borrowers = new ArrayList&lt;Student&gt;();</b>
+<b class="fc">&nbsp;        shelves = new ArrayList&lt;Shelf&gt;();</b>
+<b class="fc">&nbsp;        eJournals = new ArrayList&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void getNewBook(String book) {
+<b class="fc">&nbsp;        books.add(book);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void populateBook(String[] books) {
+<b class="fc">&nbsp;        for (String book : books) {</b>
+<b class="fc">&nbsp;            this.books.add(book);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;String&gt; searchBooks(String bookName) {
+<b class="fc">&nbsp;        ArrayList&lt;String&gt; books = new ArrayList&lt;String&gt;();</b>
+<b class="fc">&nbsp;        for (String book : this.books) {</b>
+<b class="fc">&nbsp;            String bookLowerCase = book.toLowerCase();</b>
+<b class="fc">&nbsp;            if (bookLowerCase.contains(bookName.toLowerCase())) {</b>
+<b class="fc">&nbsp;                books.add(book);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return books;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public ArrayList&lt;Journal&gt; getJournalSubs() {
+<b class="nc">&nbsp;        return journals;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean inOtherLibs(String book, Library l) {
+<b class="pc">&nbsp;        if (l.getBooks().contains(book)) {</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean inOtherLibsJournal(String journal, Library l) {
+<b class="nc">&nbsp;        if (l.getJournalSubs().contains(journal)) {</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public ArrayList&lt;String&gt; getBooks() {
+<b class="fc">&nbsp;        return books;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void borrow(String book, String studentName, int daysUntilDue) {
+<b class="fc">&nbsp;        Student borrower = new Student(book, studentName, daysUntilDue);</b>
+<b class="fc">&nbsp;        borrowers.add(borrower);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getBorrowers(String book) {
+<b class="fc">&nbsp;        String returnMe = &quot;&quot;;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; borrowers.size(); i++) {</b>
+<b class="pc">&nbsp;            if (borrowers.get(i).getBorrowedBook().equals(book)) {</b>
+<b class="fc">&nbsp;                returnMe += borrowers.get(i).toString();</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return returnMe;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean linearSearch(String name) {
+&nbsp;        for (String type :
+<b class="fc">&nbsp;                bibliography) {</b>
+<b class="fc">&nbsp;            if (name.equals(type)) {</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean binarySearch(String name) {
+&nbsp;        try {
+<b class="fc">&nbsp;            return -1 &lt; Collections.binarySearch(bibliography, name);</b>
+&nbsp;        } finally {
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private static ArrayList&lt;String&gt; populate() throws FileNotFoundException {
+<b class="fc">&nbsp;        File file = new File(&quot;src/main/java/wordlist.180000&quot;);</b>
+<b class="fc">&nbsp;        Scanner writeBibliography = new Scanner(file);</b>
+<b class="fc">&nbsp;        ArrayList&lt;String&gt; words = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        while (writeBibliography.hasNextLine()) {</b>
+<b class="fc">&nbsp;            words.add(writeBibliography.nextLine());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return words;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public ArrayList&lt;String&gt; getBibliography() {
+<b class="nc">&nbsp;        return bibliography;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addLoan(Loan loan) {
+<b class="nc">&nbsp;        loans.add(new Loan(loan.getLoanee(), loan.getBook(), loan.getStartDate()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static ArrayList&lt;EBookRequest&gt; getRequestsForEBooks() {
+<b class="fc">&nbsp;        return requestsForEBooks;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void isBookDue(Loan loan) {
+<b class="nc">&nbsp;        if ((loan.getDueDate().compareTo(LocalDate.now()) &gt; 0)) {</b>
+<b class="nc">&nbsp;            reminders.add(new Reminder(loan.getLoanee(), loan.getBook()));</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void sendReminder(Student loanee) {
+&nbsp;        // Need to send a Reminder object that will periodically be sent to the student&#39;s email
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public static boolean faster(Duration a, Duration b) {
+<b class="nc">&nbsp;        return a.toMillis() &lt;= b.toMillis();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void subscribe(Journal j){
+<b class="fc">&nbsp;        if(j.iseJournal()){</b>
+<b class="fc">&nbsp;            eJournals.add(j);</b>
+&nbsp;        }else{
+<b class="fc">&nbsp;            journals.add(j);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    //----------------------SUBSCRIPTIONS-----------------------------------------
+&nbsp;
+&nbsp;
+&nbsp;    public void addASubscription(Subscription s) {
+<b class="pc">&nbsp;        if (getSubscriptions().contains(s)) {</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            getSubscriptions().add(s);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Subscription&gt; getSubscriptions() {
+<b class="fc">&nbsp;        return subscriptions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean inOtherLibsSubscription(Subscription subscription, Library l) {
+<b class="fc">&nbsp;        boolean check = l.getSubscriptions().contains(subscription);</b>
+<b class="fc">&nbsp;        return check;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //-----------------------------------------------------Book----------------------------------------
+&nbsp;    public void addBookTOLibrary(Book s) {
+<b class="fc">&nbsp;        bookArrayList.add(s);</b>
+&nbsp;    }
+&nbsp;    public ArrayList&lt;Book&gt; getBookArrayList() {
+<b class="fc">&nbsp;        return bookArrayList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean
+&nbsp;    inOtherLibsShelf(Book s, Library l) {
+<b class="fc">&nbsp;        boolean check = l.getBookArrayList().contains(s);</b>
+<b class="fc">&nbsp;        return check;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //-----------------------------------------------------SHELVES----------------------------------------
+&nbsp;
+&nbsp;
+&nbsp;    public void newShelf(Shelf s) {
+<b class="fc">&nbsp;        shelves.add(s);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void addNewBooksToSystem(Book b, Shelf s) {
+<b class="pc">&nbsp;        if (shelves.contains(s)) {</b>
+<b class="fc">&nbsp;            s.addBookToShelf(b);</b>
+<b class="fc">&nbsp;            b.setShelfWhereStored(s);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean checkShelfForBook(Book book) {
+<b class="fc">&nbsp;        boolean bookAvailable = false;</b>
+<b class="pc">&nbsp;        if (book.getShelfWhereStored() != null &amp;&amp; book.getShelfWhereStored().getBooks().contains(book)) {</b>
+<b class="nc">&nbsp;            bookAvailable = true;</b>
+<b class="nc">&nbsp;            return bookAvailable;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return checkBookInLibrary(book);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean checkBookInLibrary(Book book) {
+<b class="fc">&nbsp;        boolean bookAvailable = false;</b>
+<b class="fc">&nbsp;        for (Shelf s : shelves) {</b>
+<b class="fc">&nbsp;            for (Book b : s.getBooks()) {</b>
+<b class="fc">&nbsp;                if (b.equals(book)) {</b>
+<b class="fc">&nbsp;                    bookAvailable = true;</b>
+&nbsp;                }
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return bookAvailable;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean addBorrower(String bookName, Student student) {
+<b class="fc">&nbsp;        borrowInstances.putIfAbsent(bookName, new ArrayList&lt;Student&gt;());</b>
+<b class="fc">&nbsp;        String name = student.getName();</b>
+<b class="fc">&nbsp;        ArrayList&lt;String&gt; borrowers = getBorrowerHistory(bookName);</b>
+<b class="fc">&nbsp;        int counter = 0;</b>
+<b class="fc">&nbsp;        for (String borrower : borrowers) {</b>
+<b class="fc">&nbsp;            if (borrower.equals(name)) {</b>
+<b class="fc">&nbsp;                counter++;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        if (counter &gt; 1) {</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        borrowInstances.get(bookName).add(student);</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;String&gt; getBorrowerHistory(String bookName) {
+<b class="fc">&nbsp;        ArrayList&lt;String&gt; borrowers = new ArrayList&lt;String&gt;();</b>
+<b class="fc">&nbsp;        ArrayList&lt;Student&gt; students = borrowInstances.get(bookName);</b>
+<b class="fc">&nbsp;        for (Student student : students) {</b>
+<b class="fc">&nbsp;            borrowers.add(student.getName());</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return borrowers;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;Journal&gt; getJournals() {
+<b class="fc">&nbsp;        return journals;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-18 23:12</div>
+</div>
+</body>
+</html>

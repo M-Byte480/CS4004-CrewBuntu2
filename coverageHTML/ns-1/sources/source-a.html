@@ -1,0 +1,159 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Student</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Student (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Student</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;public class Student {
+&nbsp;    private String borrowedBook;
+&nbsp;    private String name;
+&nbsp;    private long borrowDate;
+&nbsp;    private long dueDate;
+&nbsp;
+<b class="fc">&nbsp;    public Student(String borrowedBook, String name, int daysUntilDue) {</b>
+<b class="fc">&nbsp;        this.borrowedBook = borrowedBook;</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        borrowDate = System.currentTimeMillis();</b>
+<b class="fc">&nbsp;        dueDate = borrowDate + ((long) daysUntilDue * 24 * 60 * 60 * 1000);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getBorrowedBook() {
+<b class="fc">&nbsp;        return borrowedBook;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getName() {
+<b class="fc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public long getBorrowDate() {
+<b class="fc">&nbsp;        return borrowDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public long getDueDate() {
+<b class="fc">&nbsp;        return dueDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void increaseBorrowTime(int days) {
+<b class="fc">&nbsp;        borrowDate += ((long) days * 24 * 60 * 60 * 1000 + 1);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean checkDue() {
+<b class="fc">&nbsp;        if ( borrowDate &gt; dueDate ) {</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    public String toString(){
+<b class="fc">&nbsp;        return getName() + &quot;, &quot; + getBorrowDate() + &quot;, &quot; + getDueDate();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-18 23:12</div>
+</div>
+</body>
+</html>

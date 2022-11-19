@@ -1,8 +1,6 @@
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
@@ -13,18 +11,12 @@ import java.util.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
-//import org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-//import org.junit.Assert.*;
 
 /**
  * @author 21308128
@@ -435,7 +427,7 @@ public class JacobUnitLibraryTests {
     @ValueSource(strings = {"hello@milan@this.com", "thisismyemail.com"})
     public void failInStrudel(String e){
         Email email = new Email(e);
-        assertFalse(email.containsSingleStrudel());
+        assertTrue(email.containsSingleStrudel());
     }
 
     @DisplayName("Faulty Starting Names")
@@ -643,4 +635,33 @@ go
     }
 
     // ===================================== End of Aaron =========================================== //
+    // ====================================== Eamonn ================================================ //
+    @Test
+
+    public void isNewEBookRequestMadeWhenNotEJournal(){
+        Journal journal1 = new Journal("journal1","author1");
+
+        int sizeBefore = Library.getRequestsForEBooks().size();
+        journal1.beingBound();
+        int sizeAfter = Library.getRequestsForEBooks().size();
+        assertTrue(sizeBefore + 1 == sizeAfter);
+
+        Journal journal2 = new Journal("journal2","author2");
+        sizeBefore = Library.getRequestsForEBooks().size();
+        journal1.beingBound();
+        sizeAfter = Library.getRequestsForEBooks().size();
+        assertTrue(sizeBefore + 1 == sizeAfter);
+    }
+
+    @Test
+    public void isNewEBookRequestMadeWhenEJournalConstructor(){
+        Journal journal1 = new Journal("journal1",true);
+
+        int sizeBefore = Library.getRequestsForEBooks().size();
+        journal1.beingBound();
+        int sizeAfter = Library.getRequestsForEBooks().size();
+        assertTrue(sizeBefore == sizeAfter);
+
+    }
+    // =============================================== End of Eamonn ===================================== //
 }

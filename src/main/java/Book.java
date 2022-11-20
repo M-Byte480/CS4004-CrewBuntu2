@@ -10,7 +10,8 @@ public class Book {
     private ArrayList<String> departments;
     private ArrayList<String> bibliography;
     private boolean isAvailable;
-    private ArrayList<Student> loanees = new ArrayList<Student>();
+    private Shelf shelfWhereStored;
+    private ArrayList<Student> loanees;
     private boolean isBeingBound = false;
     private boolean isDamaged = false;
 
@@ -68,15 +69,19 @@ public class Book {
         return loanees.get(loanees.size() - 1);
     }
 
-    public Library getShelfWhereStored() {
-        return new Library();
-    }
-
-    public void setShelfWhereStored(Shelf s) {
-    }
 
     public String getBibliography() {
         return null;
     }
+
+    //-----------------------------------------------------SHELVES--------------------------------------------------
+    public void setShelfWhereStored(Shelf shelfWhereStored) {
+        this.shelfWhereStored = shelfWhereStored;
+    }
+
+    public Shelf getShelfWhereStored() {
+        return shelfWhereStored;
+    }
 }
+
 

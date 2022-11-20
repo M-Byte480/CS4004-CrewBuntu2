@@ -11,6 +11,11 @@ public class Journal {
         this.eJournal = eJournal;
         subscriptionMonths = 12;
     }
+    public Journal(String name , boolean eJournal, int subscriptionMonths){
+        this.name = name;
+        this.eJournal = eJournal;
+        this.subscriptionMonths = subscriptionMonths;
+    }
 
     public Journal(String title, String author){
         this.title = title;
@@ -21,7 +26,7 @@ public class Journal {
     public void journalDelivery() {
         subscriptionMonths--;
     }
-
+    
     public void renew(int renewAmt) {
         subscriptionMonths += renewAmt;
     }
@@ -58,4 +63,8 @@ public class Journal {
         return "Title:" + getName() + ", " + phys + " with " + getSubscriptionMonths() + " subscription months left";
     }
 
+
+    public void addJournalToArray(){
+
+    }
 }

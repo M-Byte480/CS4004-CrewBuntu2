@@ -21,26 +21,25 @@ public class Library {
     private int[] subsriptionsInYear = new int[12];
 
 
-    public void sortJournalsBasedOnYear(int[] subsriptionsInYear){
+    public void sortJournalsBasedOnYear(int[] subsriptionsInYear) {
 
     }
-
-
 
 
     public ArrayList<Journal> geteJournals() {
         return eJournals;
     }
 
-    public boolean inOtherLibsJournal(Journal journal, Library l){
-        if(l.getJournals().contains(journal) || l.geteJournals().contains(journal)){
+    public boolean inOtherLibsJournal(Journal journal, Library l) {
+        if (l.getJournals().contains(journal) || l.geteJournals().contains(journal)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     private static final ArrayList<String> bibliography;
+
     static {
         try {
             bibliography = populate();
@@ -178,10 +177,10 @@ public class Library {
     }
 
 
-    public void subscribe(Journal j){
-        if(j.iseJournal()){
+    public void subscribe(Journal j) {
+        if (j.iseJournal()) {
             eJournals.add(j);
-        }else{
+        } else {
             journals.add(j);
         }
     }
@@ -237,13 +236,12 @@ public class Library {
     }
 
     public boolean checkShelfForBook(Book book) {
-        boolean bookAvailable = false;
         if (book.getShelfWhereStored() != null && book.getShelfWhereStored().getBooks().contains(book)) {
-            bookAvailable = true;
-            return bookAvailable;
-        }
+            return true;
+        } else {
 
-        return checkBookInLibrary(book);
+            return false;
+        }
     }
 
     public boolean checkBookInLibrary(Book book) {

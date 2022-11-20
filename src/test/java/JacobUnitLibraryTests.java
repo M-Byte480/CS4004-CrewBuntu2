@@ -76,7 +76,7 @@ public class JacobUnitLibraryTests {
 
     @Test
     @DisplayName("Check for journal duplicates in other Universities")
-    public void testOtherUniJournal(){
+    public void testOtherUniJournal() {
         University ul = new University();
         University uwon = new University();
         uwon.joinUni(ul);
@@ -103,25 +103,6 @@ public class JacobUnitLibraryTests {
     //Unavailability of journal issues while they are being bound into yearly volumes
     @Test
     @DisplayName("Check Person For Admin Permissions")
-    public void sortJournalsIntoVolumes () {
-         int[] subs = new int[12];
-        Journal j = new Journal("J",false, 1);
-        Journal f = new Journal("F", false, 2);
-        Journal m = new Journal("M", false, 3);
-        Journal a = new Journal("A", false, 4);
-        Journal J = new Journal("J", false, 6);
-
-
-
-
-
-
-    }
-
-    //Complaint 4
-    //Unavailability of journal issues while they are being bound into yearly volumes
-    @Test
-    @DisplayName("Check Person For Admin Permissions")
     public void sortJournalsIntoVolumes() {
         int[] subs = new int[12];
         Journal j = new Journal("J", false, 1);
@@ -132,100 +113,171 @@ public class JacobUnitLibraryTests {
 
 
     }
+
+    //Complaint 4
+    //Unavailability of journal issues while they are being bound into yearly volumes
+//    @Test
+//    @DisplayName("Check Person For Admin Permissions")
+//    public void sortJournalsIntoVolumes() {
+//        int[] subs = new int[12];
+//        Journal j = new Journal("J", false, 1);
+//        Journal f = new Journal("F", false, 2);
+//        Journal m = new Journal("M", false, 3);
+//        Journal a = new Journal("A", false, 4);
+//        Journal J = new Journal("J", false, 6);
+//
+//    }
+
+
     //---------------------------------------Breny----------------------------------------
     //Admin Checker Complaint
-    //Check wheter a member of a university has admin permissions
+    //Check whether  a member of a university has admin permissions
     @Test
     @DisplayName("Check Person For Admin Permissions")
-    public void checkPrivelidges () {
-        Person andy = new Person("andy" , true);
-        Person tom = new Person("Tom", false);
+    public void checkPrivelidges() {
+        //-------------HAPPY PATH-------------------
+        //add a new person
+        Person andy = new Person("andy", true);
+        //Create a new college
         University ul = new University();
+        //checking admin stauts
         ul.setAdmins(andy);
-        assertTrue(ul.checkAdmins(andy));
+        //-------------------------------------------
+        //add a new person
+        Person tom = new Person("Tom", false);
+        //checking admin stauts
+        ul.setAdmins(tom);
+
+        assertAll(
+                () -> assertTrue(ul.checkAdmins(andy)),
+                () -> assertFalse(ul.checkAdmins(tom))
+        );
     }
+
     //Complaint 5
     //Subscription to journals of marginal interest to the university, which could be
     //accessed in other universities with which UWON has an agreement.
     @Test
     @DisplayName("Check to see if subscription is available in UWON")
     public void subscriptionsAcrossUWON() {
+        //-------------HAPPY PATH-------------------
+        //add colleges
         University u1 = new University();
         University u2 = new University();
+        University u3 = new University();
+        //add librarys
         Library l1 = new Library();
         Library l2 = new Library();
+        Library l3= new Library();
+        //set librarys
         u2.newLibrary(l1);
-        u2.newLibrary(l2);
+        u1.newLibrary(l2);
         u1.joinUni(u2);
+        //setting arraylist for subscriptions
         ArrayList<Book> DW = new ArrayList<>();
-        ArrayList<Book> D = new ArrayList<>();
+        //creating new subscriptions
         Subscription davidWalliams = new Subscription("Gangster Granny", DW);
-
-
+        //add subscription to library
         l1.addASubscription(davidWalliams);
-        assertTrue(u2.getSubscriptionForLib(davidWalliams));
+        //---------------------------------------------------
+
+        Subscription RonaldMcDonald = new Subscription("Maccys", DW);
+        u3.newLibrary(l3);
+        assertAll(
+                //Happy path
+                () -> assertTrue(u1.getSubscriptionForLib(davidWalliams)),
+                //checking subscription which colleges doesnt have
+                () -> assertFalse(u1.getSubscriptionForLib(RonaldMcDonald)),
+                //checking for subscription with college no in agreement
+                () -> assertFalse(u3.getSubscriptionForLib(davidWalliams))
+
+        );
+
     }
 
     //Complaint 6
     //Acquisition of books or proceedings of marginal interest to the university, which
     //could be borrowed from other universities with which UWON has an agreement.
     @Test
-    @DisplayName("Check to see if subscription is available in UWON")
+    @DisplayName("Check if book can be borrowed using the UWON agreement ")
     public void sendingCompSciBooksFromLSADToUL() {
+        //-------------HAPPY PATH-------------------
+        //Create new colleges
         University UL = new University();
         University LSAD = new University();
-
+        //create new libraries
         Library bugLibrary = new Library();
-        Library artStudentBodyOdour = new Library();
-
+        Library l1 = new Library();
+        //add libraries to colleges
         UL.newLibrary(bugLibrary);
-        LSAD.newLibrary(artStudentBodyOdour);
-        ArrayList<Book> bugBook = new ArrayList<>();
-        Shelf bugShelf = new Shelf("Bugs", bugBook);
+        LSAD.newLibrary(l1);
+        //Create new book
         Book Worms = new Book();
-        bugShelf.addBookToShelf(Worms);
-
-        LSAD.joinUni(UL);
-
-
-        Worms = new Book("Bugs", "Breny");
+        //add book to library
         bugLibrary.addBookTOLibrary(Worms);
+        //Join colleges
+        LSAD.joinUni(UL);
+        //----------------------------------------
+        University outsiders = new University();
+        Book hello = new Book();
+        University insiders = new University();
+        insiders.joinUni(UL);
 
-        boolean temp = LSAD.getBookForLib(Worms);
-
-        assertTrue(temp);
+        assertAll(
+                //Happy path check
+                () -> assertTrue(LSAD.getBookForLib(Worms)),
+                //Check if library outside the agreement can access
+                () -> assertFalse(outsiders.getBookForLib(Worms)),
+                //Check if book outside all colleges can be borrowed
+                () -> assertFalse(LSAD.getBookForLib(hello)),
+                //add a third library to agreement to ensure it doesn't just work on two
+                () -> assertTrue(insiders.getBookForLib(Worms))
+                );
     }
+
     //Complaint 7
     //Inaccuracy of card indexes, e.g. a book is stated as being available whereas it is not
     //found at the appropriate place on the shelves.
     @Test
     @DisplayName("Problem 7 : Innacuracy of book being on specified shelf")
-    public void bookOnShelFinder() {
+    public void bookOnShelFinder(){
+        //-------------HAPPY PATH-------------------
+        //Create a new College
         University BrenysWRLD = new University();
+        //Create a new library
         Library BookRoom = new Library();
+        //add the library to college
         BrenysWRLD.newLibrary(BookRoom);
-
-        ArrayList<Book> AnimeArraylist = new ArrayList<>();
-        Book Yugioh = new Book("Yu-gi-oh", "Kazuki Takahashi");
-        AnimeArraylist.add(Yugioh);
-        Shelf Anime = new Shelf("Amine", AnimeArraylist);
-        BookRoom.newShelf(Anime);
-
-        ArrayList<Book> OverwatchArraylist = new ArrayList<>();
-        Book Monke = new Book("Monke", "Winston");
-        OverwatchArraylist.add(Monke);
+        //new book array list to go on shelf
+        ArrayList<Book> OverwatchArraylist = new ArrayList<>() ;
+        //create a new shelf
         Shelf Overwatch = new Shelf("Overwatch", OverwatchArraylist);
+        //add the shelf to library
         BookRoom.newShelf(Overwatch);
+        //new book
+        Book bobo = new Book("Monke","Winston");
+        //add book to system with specified shelf
+        BookRoom.addNewBooksToSystem(bobo,Overwatch);
+        //--------------------------------------------------
+        Book Hello = new Book();
 
-        BookRoom.addNewBooksToSystem(Monke, Overwatch);
+        University outsiders = new University();
+        Library outsidersLibrary = new Library();
+        outsiders.newLibrary(outsidersLibrary);
 
-        Book bobo = new Book("Monke", "Winston");
-        BookRoom.addNewBooksToSystem(bobo, Overwatch);
-        BookRoom.newShelf(Anime);
-        BookRoom.newShelf(Overwatch);
-        BrenysWRLD.newLibrary(BookRoom);
+        Book outside = new Book();
+        outsidersLibrary.addBookTOLibrary(outside);
 
-        assertTrue(BrenysWRLD.checkUniversityForBook(bobo));
+         BookRoom.addBookTOLibrary(outside);
+
+        assertAll(
+                //Happy path
+                () -> assertTrue(BrenysWRLD.checkUniversityForBook(bobo)),
+                //Check for random book
+                () -> assertFalse(BrenysWRLD.checkUniversityForBook(Hello)),
+                //check book with no shelf
+                () -> assertFalse(BrenysWRLD.checkUniversityForBook(outside))
+        );
     }
     // ===================================== End of Breny =========================================== //
 
@@ -399,7 +451,7 @@ public class JacobUnitLibraryTests {
     @DisplayName("Valid Emails")
     @ParameterizedTest
     @ValueSource(strings = {"bepis@uwon.com", "milan@lib.ie", "josh@josh.josh", "k@gp.tv"})
-    public void validEmail(String e){
+    public void validEmail(String e) {
 
         Email email = new Email(e);
         assertNotEquals(null, email.getEmail());
@@ -418,21 +470,21 @@ public class JacobUnitLibraryTests {
 
                     assertAll("Name",
                             () -> assertTrue(email.nameContainsAlphanumericCharacters())
-                            );
+                    );
 
                     assertAll("Domain",
                             () -> assertTrue(email.domainContainAlphabeticalCharacters()),
                             () -> assertTrue(email.domainContainsSingleDot())
-                            );
-                    }
-                );
+                    );
+                }
+        );
     }
 
 
     @ParameterizedTest
     @DisplayName("Invalid Emails")
     @ValueSource(strings = {"hello@gmail.com"})
-    public void invalidEmails(String email){
+    public void invalidEmails(String email) {
         String[] emailSplit = email.split("@");
 
         assertAll(

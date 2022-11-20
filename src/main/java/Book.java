@@ -10,9 +10,9 @@ public class Book {
     private ArrayList<String> departments;
     private ArrayList<String> bibliography;
     private boolean isAvailable;
-    private ArrayList<Student> loanees;
+    private ArrayList<Student> loanees = new ArrayList<Student>();
     private boolean isBeingBound = false;
-    private boolean isDamaged;
+    private boolean isDamaged = false;
 
     public Book(String name, String author) {
         this.name = name;
